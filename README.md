@@ -21,6 +21,9 @@
     cmake --build build --config Release
     cmake --build build --target install --config Release
     ```
+### Unit Test
+- *nested-shaper* uses [Catch2](https://github.com/catchorg/Catch2) for using testing.
+- Turn on the CMake **BUILD_UNIT_TEST** option
 
 ## License
 This project is licensed under the [Unlicense](https://unlicense.org/) - see the

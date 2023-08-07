@@ -6,6 +6,8 @@ project(
     LANGUAGES CXX
 )
 
+option(BUILD_UNIT_TEST "Build unit test (uses catch2)" OFF)
+
 # Enforce Cpp Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
@@ -19,6 +21,10 @@ target_include_directories(nested-shaper INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 add_library(${PROJECT_NAME}::nested-shaper ALIAS nested-shaper)
+
+if(BUILD_UNIT_TEST)
+  add_subdirectory(test)
+endif()
 
 # Set common compiler warnings
 include(cmake/CompilerWarnings.cmake)
