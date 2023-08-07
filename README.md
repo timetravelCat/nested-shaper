@@ -1,25 +1,26 @@
-# minimal-cpp-template
+# nested-shaper
 
 ## Features
+- **header only** library
+- Requires C++ compiler only. (libstdc++ is not necessary)
 
 ## Getting Started
-* Replace **"project-name"** in CMakeLists.txt project()
-* Replace **project-nameConfig.cmake.in** in cmake/
-* Replace **project-name** folder name in include/
-
 ### Prerequisites
-* **CMake v3.15+**
+* **CMake v3.15+** if you want to install system-wide library.
 * **C++ Compiler** - needs to support at least the **C++17** standard, i.e. *MSVC*,
 *GCC*, *Clang*
 > ***Note:*** *You also need to be able to provide ***CMake*** a supported
 [generator](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html).*
 
 ### Installation from sources
-```bash
-cmake -Bbuild -DCMAKE_INSTALL_PREFIX=$(INSTALL_LOCATION)
-cmake --build build --config Release
-cmake --build build --target install --config Release
-```
+- *nested-shaper* is header-only library.
+    - Copy include/** to your project.
+- If you want to install system-wide, requires **CMake v3.15+**
+    ```bash
+    cmake -Bbuild -DCMAKE_INSTALL_PREFIX=$(INSTALL_LOCATION)
+    cmake --build build --config Release
+    cmake --build build --target install --config Release
+    ```
 
 ## License
 This project is licensed under the [Unlicense](https://unlicense.org/) - see the

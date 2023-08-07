@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(
-    "project-name"
+    nested-shaper
     VERSION 0.1.0
     LANGUAGES CXX
 )
@@ -11,30 +11,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 
 ###################
-# Library example #
+## nested-shaper ##
 ###################
-# add_library(${LIBRARY_NAME} [INTERFACE]
-#  Listing up your sources if not interface library
-# )
-# target_include_directories(${LIBRARY_NAME} [PUBLIC or INTERFACE]
-#     $<INSTALL_INTERFACE:include>
-#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-# )
-# add_library(${PROJECT_NAME}::${LIBRARY_NAME} ALIAS ${LIBRARY_NAME})
-
-######################
-# Executable example #
-######################
-# add_executable(${EXECUTABLE_NAME}
-#   Listing up your sources
-# )
-# target_include_directories(${EXECUTABLE_NAME} PUBLIC
-#     $<INSTALL_INTERFACE:include>
-#     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#     PRIVATE
-#     ${CMAKE_CURRENT_SOURCE_DIR}/src
-# )
-# add_executable(${PROJECT_NAME}::${EXECUTABLE_NAME} ALIAS ${EXECUTABLE_NAME})
+add_library(nested-shaper INTERFACE)
+target_include_directories(nested-shaper INTERFACE
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+add_library(${PROJECT_NAME}::nested-shaper ALIAS nested-shaper)
 
 # Set common compiler warnings
 include(cmake/CompilerWarnings.cmake)
@@ -51,9 +35,7 @@ include(GNUInstallDirs)
 
 install(
   TARGETS 
-    # Listing up all excutables that you want to install
-    # ${LIBRARY_NAME}
-    # ${EXECUTABLE_NAME}
+  nested-shaper
   EXPORT ${PROJECT_NAME}Targets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
