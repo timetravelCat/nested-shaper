@@ -1,5 +1,11 @@
 #include <catch2/catch_test_macros.hpp>
 #include <nested-shaper/sized_queue.hpp>
+#include <nested-shaper/summator/naive_add.hpp>
+#include <nested-shaper/summator/kahan_babushka_neumaier_add.hpp>
+#include <nested-shaper/summator/kahan_babushka_klein_add.hpp>
+
+#include <iostream>
+#include <iomanip>
 
 TEST_CASE("Testing sized_queue class", "[sized_queue]")
 {
@@ -128,5 +134,56 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         REQUIRE(sized_queue.size() == 4);
         REQUIRE(sized_queue.empty() == false);
         REQUIRE(sized_queue.full() == true);
+    }
+
+    SECTION("summator")
+    {
+        ns::summator<int, ns::SummatorType::NAIVE> summator_naive;
+        REQUIRE(summator_naive.get() == 0);
+        summator_naive += 2;
+        REQUIRE(summator_naive.get() == 2);
+        summator_naive.reset();
+        REQUIRE(summator_naive.get() == 0);
+        summator_naive -= 2;
+        REQUIRE(summator_naive.get() == -2);
+
+        ns::summator<float, ns::SummatorType::KBN> summator;
+        REQUIRE(summator.get() == 0.0f);
+        const float a = 0.1f;
+        float sum = 0.0f;
+
+        for (int i = 0; i < 10; i++)
+        {
+            sum += a;
+            summator += a;
+        }
+
+        REQUIRE(summator.get() == 1.0f);
+        REQUIRE(summator.get() != sum);
+
+        for (int i = 0; i < 10; i++)
+        {
+            sum -= a;
+            summator -= a;
+        }
+
+        REQUIRE(summator.get() == 0.0f);
+        REQUIRE(summator.get() != sum);
+
+        ns::summator<double, ns::SummatorType::KBN> summator_double_kbn;
+        ns::summator<double, ns::SummatorType::NAIVE> summator_double_naive;
+
+        summator_double_kbn += 1.0;
+        summator_double_kbn += pow(10.0, 100.0);
+        summator_double_kbn += 1.0;
+        summator_double_kbn -= pow(10.0, 100.0);
+
+        summator_double_naive += 1.0;
+        summator_double_naive += pow(10.0, 100.0);
+        summator_double_naive += 1.0;
+        summator_double_naive -= pow(10.0, 100.0);
+
+        REQUIRE(summator_double_kbn.get() == 2.0);
+        REQUIRE(summator_double_naive.get() == 0.0);
     }
 }
