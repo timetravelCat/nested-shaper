@@ -18,11 +18,11 @@ namespace ns
         size_type size() const override;
         size_type max_size() const override;
         size_type capacity() const override;
-        void reset() override;
-        void resize(const size_type &size) override;
-        void fill(const value_type &value) override;
-        void pop() override;
-        void push(const value_type &value) override;
+        virtual void reset() override;
+        virtual void resize(const size_type &size) override;
+        virtual void fill(const value_type &value) override;
+        virtual void pop() override;
+        virtual void push(const value_type &value) override;
         reference front(const size_type &index = 0) override;
         const_reference front(const size_type &index = 0) const override;
         reference back(const size_type &index = 0) override;
@@ -109,11 +109,7 @@ namespace ns
     void sized_queue<T, Capacity>::push(const value_type &value)
     {
         if (full())
-        {
             pop();
-            push(value);
-            return;
-        }
 
         _size++;
         _back == _max_size - 1 ? _back = 0 : _back++;
@@ -138,7 +134,7 @@ namespace ns
     {
         if (index >= _size)
             return front();
-        return _back >= index ? _data[_back - index] : _data[_max_size - index + _back]; //3, 1, - 0
+        return _back >= index ? _data[_back - index] : _data[_max_size - index + _back];
     }
     template <typename T, size_t Capacity>
     typename sized_queue<T, Capacity>::const_reference sized_queue<T, Capacity>::back(const size_type &index) const

@@ -22,6 +22,7 @@ namespace ns
         virtual void reset() = 0;
         virtual void operator+=(const_reference value) = 0;
         virtual value_type get() const = 0;
+        virtual void set(const_reference value);
 
         void operator-=(const_reference value) { operator+=(-value); }
 
@@ -38,4 +39,12 @@ namespace ns
         // virtual void operator+=(const_reference value) = 0;
         // virtual value_type get() const = 0;
     };
+
+    template <typename T>
+    void summator_interface<T>::set(const_reference value)
+    {
+        reset();
+        sum = value;
+    }
+
 } // namespace ns

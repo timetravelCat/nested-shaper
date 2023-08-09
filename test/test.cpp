@@ -3,6 +3,7 @@
 #include <nested-shaper/summator/naive_add.hpp>
 #include <nested-shaper/summator/kahan_babushka_neumaier_add.hpp>
 #include <nested-shaper/summator/kahan_babushka_klein_add.hpp>
+#include <nested-shaper/average_filter.hpp>
 
 #include <iostream>
 #include <iomanip>
@@ -185,5 +186,39 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
 
         REQUIRE(summator_double_kbn.get() == 2.0);
         REQUIRE(summator_double_naive.get() == 0.0);
+
+        ns::summator<double, ns::SummatorType::KBN> summator_double_kbn2;
+        summator_double_kbn2 = summator_double_kbn;
+        REQUIRE(summator_double_kbn.get() == summator_double_kbn2.get());
+
+        summator_double_kbn2.set(5.0);
+        REQUIRE(summator_double_kbn2.get() == 5.0);
+    }
+
+    SECTION("average_filter")
+    {
+        ns::average_filter<float, 3> average_filter;
+        average_filter.push(1.0f);
+        REQUIRE(average_filter.get() == 1.0f);
+        average_filter.push(2.0f);
+        REQUIRE(average_filter.get() == 1.5f);
+        average_filter.push(3.0f);
+        REQUIRE(average_filter.get() == 2.0f);
+        average_filter.push(4.0f);
+        REQUIRE(average_filter.get() == 3.0f);
+        average_filter.push(-7.0f);
+        REQUIRE(average_filter.get() == 0.0f);
+
+        ns::average_filter<float, 3, false> average_filter_non_recursive;
+        average_filter_non_recursive.push(1.0f);
+        REQUIRE(average_filter_non_recursive.get() == 1.0f);
+        average_filter_non_recursive.push(2.0f);
+        REQUIRE(average_filter_non_recursive.get() == 1.5f);
+        average_filter_non_recursive.push(3.0f);
+        REQUIRE(average_filter_non_recursive.get() == 2.0f);
+        average_filter_non_recursive.push(4.0f);
+        REQUIRE(average_filter_non_recursive.get() == 3.0f);
+        average_filter_non_recursive.push(-7.0f);
+        REQUIRE(average_filter_non_recursive.get() == 0.0f);
     }
 }

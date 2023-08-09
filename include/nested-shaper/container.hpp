@@ -39,4 +39,14 @@ namespace ns
         virtual reference back(const size_type &index = 0) = 0;
         virtual const_reference back(const size_type &index = 0) const = 0;
     };
+
+    template <typename T>
+    class filter : virtual public queue<T>
+    {
+    public:
+        // Calculate filter results on current queue.
+        virtual value_type get() const = 0;
+        // Pubsh and calculate filter.
+        virtual value_type retrieve(const_reference value) = 0;
+    };
 } // namespace ns
