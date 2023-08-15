@@ -46,7 +46,7 @@ namespace ns
     public:
         // Calculate filter results on current queue.
         virtual value_type get() const = 0;
-        // Pubsh and calculate filter.
+        // Push and calculate filter.
         virtual value_type retrieve(const_reference value) = 0;
     };
 } // namespace ns

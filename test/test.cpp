@@ -4,6 +4,8 @@
 #include <nested-shaper/summator/kahan_babushka_neumaier_add.hpp>
 #include <nested-shaper/summator/kahan_babushka_klein_add.hpp>
 #include <nested-shaper/average_filter.hpp>
+#include <nested-shaper/internal/derivative.hpp>
+#include <nested-shaper/internal/pack.hpp>
 
 #include <iostream>
 #include <iomanip>
@@ -220,5 +222,46 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         REQUIRE(average_filter_non_recursive.get() == 3.0f);
         average_filter_non_recursive.push(-7.0f);
         REQUIRE(average_filter_non_recursive.get() == 0.0f);
+    }
+
+    SECTION("derivative")
+    {
+        ns::average_filter<float, 3> average_filter;
+        average_filter.push(1.0f);
+        average_filter.push(2.0f);
+        average_filter.push(4.0f);
+
+        ns::__ns__internal::forward_derivative<ns::average_filter<float, 3>, 0> _forward_zero_derivative;
+        REQUIRE(_forward_zero_derivative(average_filter, 0.1f, 0) == 1.0f);
+        REQUIRE(_forward_zero_derivative(average_filter, 0.1f, 1) == 2.0f);
+        REQUIRE(_forward_zero_derivative(average_filter, 0.1f, 2) == 4.0f);
+
+        ns::__ns__internal::forward_derivative<ns::average_filter<float, 3>, 1> _forward_first_derivative;
+        REQUIRE(_forward_first_derivative(average_filter, 0.1f, 0) == 10.0f);
+        REQUIRE(_forward_first_derivative(average_filter, 0.1f, 1) == 20.0f);
+
+        ns::__ns__internal::forward_derivative<ns::average_filter<float, 3>, 2> _forward_second_derivative;
+        REQUIRE(_forward_second_derivative(average_filter, 0.1f, 0) == 100.0f);
+
+        ns::__ns__internal::backward_derivative<ns::average_filter<float, 3>, 0> _backward_zero_derivative;
+        REQUIRE(_backward_zero_derivative(average_filter, 0.1f, 0) == 4.0f);
+        REQUIRE(_backward_zero_derivative(average_filter, 0.1f, 1) == 2.0f);
+        REQUIRE(_backward_zero_derivative(average_filter, 0.1f, 2) == 1.0f);
+
+        ns::__ns__internal::backward_derivative<ns::average_filter<float, 3>, 1> _backward_first_derivative;
+        REQUIRE(_backward_first_derivative(average_filter, 0.1f, 0) == 20.0f);
+        REQUIRE(_backward_first_derivative(average_filter, 0.1f, 1) == 10.0f);
+
+        ns::__ns__internal::backward_derivative<ns::average_filter<float, 3>, 2> _backward_second_derivative;
+        REQUIRE(_backward_second_derivative(average_filter, 0.1f, 0) == 100.0f);
+
+        ns::__ns__internal::average_filter_pack<float, true, ns::SummatorType::NAIVE, 3, 5, 7> _pack;
+        ns::__ns__internal::getter<float, 0>{}.get(_pack).push(1.0f);
+        ns::__ns__internal::getter<float, 1>{}.get(_pack).push(2.0f);
+        ns::__ns__internal::getter<float, 2>{}.get(_pack).push(3.0f);
+
+        REQUIRE(_pack.v.front() == 1.0f);
+        REQUIRE(_pack.p.v.front() == 2.0f);
+        REQUIRE(_pack.p.p.v.front() == 3.0f);
     }
 }
