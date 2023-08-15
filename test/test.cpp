@@ -263,5 +263,9 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         REQUIRE(_pack.v.front() == 1.0f);
         REQUIRE(_pack.p.v.front() == 2.0f);
         REQUIRE(_pack.p.p.v.front() == 3.0f);
+
+        REQUIRE(_pack[0].front() == 1.0f);
+        REQUIRE(_pack[1].front() == 2.0f);
+        REQUIRE(_pack[2].front() == 3.0f);
     }
 }
