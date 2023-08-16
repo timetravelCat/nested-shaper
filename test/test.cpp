@@ -6,6 +6,7 @@
 #include <nested-shaper/average_filter.hpp>
 #include <nested-shaper/internal/derivative.hpp>
 #include <nested-shaper/internal/pack.hpp>
+#include <nested-shaper/nested_filter.hpp>
 
 #include <iostream>
 #include <iomanip>
@@ -267,5 +268,23 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         REQUIRE(_pack[0].front() == 1.0f);
         REQUIRE(_pack[1].front() == 2.0f);
         REQUIRE(_pack[2].front() == 3.0f);
+    }
+
+    SECTION("nested_filter")
+    {
+        ns::nested_filter<float, 3, true, ns::SummatorType::KBN, 3, 5> _nested_filter{2, 4};
+
+        REQUIRE(_nested_filter.isReady() == false);
+        _nested_filter.fill(1.0f);
+        REQUIRE(_nested_filter.isReady() == true);
+        _nested_filter.reset();
+        REQUIRE(_nested_filter.isReady() == false);
+
+        _nested_filter.fill(1.0f);
+        _nested_filter.update(2.0f);
+
+        // _nested_filter._average_filters.v.back();
+
+        // ns::
     }
 }

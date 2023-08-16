@@ -34,5 +34,66 @@ namespace ns
             template <typename pack>
             filter<T> &get(pack &_p) { return _p.v; }
         };
+
+        template <size_t Capacity, size_t... Capacities>
+        struct pack_functor
+        {
+            template <typename pack>
+            void reset(pack &_p)
+            {
+                _p.v.reset();
+                pack_functor<Capacities...>{}.reset(_p.p);
+            }
+
+            template <typename pack, typename T>
+            void fill(pack &_p, const T &input)
+            {
+                _p.v.fill(input);
+                pack_functor<Capacities...>{}.fill(_p.p, input);
+            }
+
+            template <typename pack, typename Arg, typename... Args>
+            void resize(pack &_p, Arg arg, Args... args)
+            {
+                _p.v.resize(arg);
+                pack_functor<Capacities...>{}.resize(_p.p, args...);
+            }
+
+            template <typename pack, typename T>
+            void update(pack &_p, const T &input)
+            {
+                _p.v.push(input);
+                if (_p.v.full())
+                    pack_functor<Capacities...>{}.update(_p.p, _p.v.get());
+            }
+        };
+
+        template <size_t Capacity>
+        struct pack_functor<Capacity>
+        {
+            template <typename pack>
+            void reset(pack &_p)
+            {
+                _p.v.reset();
+            }
+
+            template <typename pack, typename T>
+            void fill(pack &_p, const T &input)
+            {
+                _p.v.fill(input);
+            }
+
+            template <typename pack, typename Arg>
+            void resize(pack &_p, Arg arg)
+            {
+                _p.v.resize(arg);
+            }
+
+            template <typename pack, typename T>
+            void update(pack &_p, const T &input)
+            {
+                _p.v.push(input);
+            }
+        };
     } // namespace __ns__internal
 } // namespace ns
