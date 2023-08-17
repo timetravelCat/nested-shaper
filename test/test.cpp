@@ -138,6 +138,9 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         REQUIRE(sized_queue.size() == 4);
         REQUIRE(sized_queue.empty() == false);
         REQUIRE(sized_queue.full() == true);
+
+
+
     }
 
     SECTION("summator")
@@ -232,28 +235,28 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         average_filter.push(2.0f);
         average_filter.push(4.0f);
 
-        ns::__ns__internal::forward_derivative<ns::average_filter<float, 3>, 0> _forward_zero_derivative;
+        ns::__ns__internal::forward_derivative<0> _forward_zero_derivative;
         REQUIRE(_forward_zero_derivative(average_filter, 0.1f, 0) == 1.0f);
         REQUIRE(_forward_zero_derivative(average_filter, 0.1f, 1) == 2.0f);
         REQUIRE(_forward_zero_derivative(average_filter, 0.1f, 2) == 4.0f);
 
-        ns::__ns__internal::forward_derivative<ns::average_filter<float, 3>, 1> _forward_first_derivative;
+        ns::__ns__internal::forward_derivative<1> _forward_first_derivative;
         REQUIRE(_forward_first_derivative(average_filter, 0.1f, 0) == 10.0f);
         REQUIRE(_forward_first_derivative(average_filter, 0.1f, 1) == 20.0f);
 
-        ns::__ns__internal::forward_derivative<ns::average_filter<float, 3>, 2> _forward_second_derivative;
+        ns::__ns__internal::forward_derivative<2> _forward_second_derivative;
         REQUIRE(_forward_second_derivative(average_filter, 0.1f, 0) == 100.0f);
 
-        ns::__ns__internal::backward_derivative<ns::average_filter<float, 3>, 0> _backward_zero_derivative;
+        ns::__ns__internal::backward_derivative<0> _backward_zero_derivative;
         REQUIRE(_backward_zero_derivative(average_filter, 0.1f, 0) == 4.0f);
         REQUIRE(_backward_zero_derivative(average_filter, 0.1f, 1) == 2.0f);
         REQUIRE(_backward_zero_derivative(average_filter, 0.1f, 2) == 1.0f);
 
-        ns::__ns__internal::backward_derivative<ns::average_filter<float, 3>, 1> _backward_first_derivative;
+        ns::__ns__internal::backward_derivative<1> _backward_first_derivative;
         REQUIRE(_backward_first_derivative(average_filter, 0.1f, 0) == 20.0f);
         REQUIRE(_backward_first_derivative(average_filter, 0.1f, 1) == 10.0f);
 
-        ns::__ns__internal::backward_derivative<ns::average_filter<float, 3>, 2> _backward_second_derivative;
+        ns::__ns__internal::backward_derivative<2> _backward_second_derivative;
         REQUIRE(_backward_second_derivative(average_filter, 0.1f, 0) == 100.0f);
 
         ns::__ns__internal::average_filter_pack<float, true, ns::SummatorType::NAIVE, 3, 5, 7> _pack;
@@ -272,19 +275,20 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
 
     SECTION("nested_filter")
     {
-        ns::nested_filter<float, 3, true, ns::SummatorType::KBN, 3, 5> _nested_filter{2, 4};
+        ns::nested_filter<float, 4, true, ns::SummatorType::KBN, 3, 5> _nested_filter{2, 4};
 
         REQUIRE(_nested_filter.isReady() == false);
         _nested_filter.fill(1.0f);
         REQUIRE(_nested_filter.isReady() == true);
         _nested_filter.reset();
         REQUIRE(_nested_filter.isReady() == false);
-
         _nested_filter.fill(1.0f);
+        _nested_filter.update(1.0f);
         _nested_filter.update(2.0f);
-
-        // _nested_filter._average_filters.v.back();
-
-        // ns::
+        _nested_filter.update(2.0f);
+        _nested_filter.update(4.0f);
+        const float* result = _nested_filter.peek(0.1f);
+        REQUIRE(result[2] == 18.75f);
+        REQUIRE(result[3] == 125.0f);
     }
 }

@@ -10,6 +10,8 @@ namespace ns
     template <typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
     class nested_filter : protected average_filter<T, Depth, Recursive, summatorType>
     {
+        static_assert(Depth >= 1);
+
     public:
         nested_filter();
         template <typename... Args>
@@ -32,11 +34,18 @@ namespace ns
         bool update(const T &input);
 
         // Calculate average, derivatives of nested average queue.
-        const T *peek(const T &dt) const;
+        const T *peek(const T &dt);
 
     private:
         T derivatives[Depth];
         __ns__internal::average_filter_pack<T, Recursive, summatorType, Capacities...> _average_filters;
+
+        template <size_t Ordinal>
+        friend class __ns__internal::forward_derivative;
+        template <size_t Ordinal>
+        friend class __ns__internal::backward_derivative;
+        template <size_t A, size_t B>
+        friend class __ns__internal::recursive_derivative;
     };
 
     template <typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
@@ -78,21 +87,9 @@ namespace ns
         return isReady();
     }
     template <typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
-    const T *nested_filter<T, Depth, Recursive, summatorType, Capacities...>::peek(const T &dt) const
+    const T *nested_filter<T, Depth, Recursive, summatorType, Capacities...>::peek(const T &dt)
     {
-        derivatives[0] = average_filter<T, Depth, Recursive, summatorType>::get();
-        using _ftype = average_filter<T, Depth, Recursive, summatorType>;
-        using namespace __ns__internal;
-        derivatives[1] = backward_derivative<_ftype, 0>(*this, dt, 0) - forward_derivative<_ftype, 0>(*this, dt, 0);
-        // derivatives[1] = backward_derivative<_ftype, 0>
-        // derivatives[1] : first derivative
-        // __ns__internal::backward_derivative<average_filter<T, Depth, Recursive, summatorType>, 0> - __ns__internal::backward_derivative<average_filter<T, Depth, Recursive, summatorType>, 0>
-        // derivatives[2] : second derivative
-        // ...
-        // derivatives[Depth-1] : Depth-1 derivative
-        // type : average_filter<T, Depth, Recursive, summatorType>
-        // backward_derivative<average_filter,
-        // return (backward(dt, 0, order) - forward(dt, 0, order)) / (Scalar(Depth - order) * dt);
+        __ns__internal::recursive_derivative<Depth, Depth>{}.derivative(*this, derivatives, dt);
         return derivatives;
     }
 } // namespace ns

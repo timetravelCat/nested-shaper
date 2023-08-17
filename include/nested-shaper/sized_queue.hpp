@@ -93,8 +93,8 @@ namespace ns
 
         // mark as full
         _size = _max_size;
-        _front = _max_size - 1;
-        _back = 0;
+        _back = _max_size - 1;
+        _front = 0;
     }
     template <typename T, size_t Capacity>
     void sized_queue<T, Capacity>::pop()
