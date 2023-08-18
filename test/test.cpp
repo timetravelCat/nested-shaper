@@ -7,6 +7,7 @@
 #include <nested-shaper/internal/derivative.hpp>
 #include <nested-shaper/internal/pack.hpp>
 #include <nested-shaper/nested_filter.hpp>
+#include <nested-shaper/nested_shaper.hpp>
 
 #include <iostream>
 #include <iomanip>
@@ -138,9 +139,6 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         REQUIRE(sized_queue.size() == 4);
         REQUIRE(sized_queue.empty() == false);
         REQUIRE(sized_queue.full() == true);
-
-
-
     }
 
     SECTION("summator")
@@ -287,8 +285,26 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
         _nested_filter.update(2.0f);
         _nested_filter.update(2.0f);
         _nested_filter.update(4.0f);
-        const float* result = _nested_filter.peek(0.1f);
+        const float *result = _nested_filter.peek(0.1f);
         REQUIRE(result[2] == 18.75f);
         REQUIRE(result[3] == 125.0f);
+    }
+
+    SECTION("nested_shaper")
+    {
+        ns::nested_shaper<2, float, 3, true, ns::SummatorType::KBN, 3, 5> _nested_shaper{2, 4};
+        REQUIRE(_nested_shaper.isReady() == false);
+        const float input[] = {1.0f, 0.0f};
+        _nested_shaper.fill(input);
+        REQUIRE(_nested_shaper.isReady() == true);
+        _nested_shaper.reset();
+        REQUIRE(_nested_shaper.isReady() == false);
+        _nested_shaper.fill(input);
+        _nested_shaper.update(input);
+        const float *peek = _nested_shaper.peek(0.1f);
+        REQUIRE(peek[0] == 1.0f);
+        REQUIRE(peek[1] == 0.0f);
+        REQUIRE(peek[2] == 0.0f);
+        REQUIRE(peek[3] == 0.0f);
     }
 }

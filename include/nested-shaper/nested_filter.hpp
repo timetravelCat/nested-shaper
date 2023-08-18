@@ -46,6 +46,8 @@ namespace ns
         friend class __ns__internal::backward_derivative;
         template <size_t A, size_t B>
         friend class __ns__internal::recursive_derivative;
+        template <size_t Channel, typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
+        friend class nested_shaper;
     };
 
     template <typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
