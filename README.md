@@ -2,13 +2,15 @@
 
 ## Features
 - **header only** library
-- Requires C++ compiler only. (libstdc++ is not necessary)
+- Requires C++ compiler supports C++11 standard. (libstdc++/libc++ is not necessary)
+
+## Limitations
+- (WIP) Zero vel-acc-jerk... initialization for nested_shaper
 
 ## Getting Started
 ### Prerequisites
+* **C++ Compiler** - needs to support at least the **C++11** standard, i.e. *MSVC*, *GCC*, *Clang*
 * **CMake v3.15+** if you want to install system-wide library.
-* **C++ Compiler** - needs to support at least the **C++17** standard, i.e. *MSVC*,
-*GCC*, *Clang*
 > ***Note:*** *You also need to be able to provide ***CMake*** a supported
 [generator](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html).*
 
@@ -21,6 +23,7 @@
     cmake --build build --config Release
     cmake --build build --target install --config Release
     ```
+    
 ### Unit Test
 - *nested-shaper* uses [Catch2](https://github.com/catchorg/Catch2) for using testing.
 - Turn on the CMake **BUILD_UNIT_TEST** option

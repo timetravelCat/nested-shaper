@@ -61,6 +61,11 @@ namespace ns
         nested_filter<T, Depth, Recursive, summatorType, Capacities...> nested_filters[Channel];
     };
 
+    template <size_t Channel, size_t Depth, size_t... Capacities>
+    using nested_shaperf = nested_shaper<Channel, float, Depth, true, SummatorType::KBN, Capacities...>;
+    template <size_t Channel, size_t Depth, size_t... Capacities>
+    using nested_shaperd = nested_shaper<Channel, double, Depth, true, SummatorType::KBN, Capacities...>;
+
     template <size_t Channel, typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
     nested_shaper<Channel, T, Depth, Recursive, summatorType, Capacities...>::nested_shaper() {}
     template <size_t Channel, typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>

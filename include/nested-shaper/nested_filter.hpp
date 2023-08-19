@@ -50,6 +50,11 @@ namespace ns
         friend class nested_shaper;
     };
 
+    template <size_t Depth, size_t... Capacities>
+    using nested_filterf = nested_filter<float, Depth, true, SummatorType::KBN, Capacities...>;
+    template <size_t Depth, size_t... Capacities>
+    using nested_filterd = nested_filter<double, Depth, true, SummatorType::KBN, Capacities...>;
+
     template <typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
     nested_filter<T, Depth, Recursive, summatorType, Capacities...>::nested_filter() : average_filter<T, Depth, Recursive, summatorType>() {}
     template <typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>

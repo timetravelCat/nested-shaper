@@ -273,7 +273,8 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
 
     SECTION("nested_filter")
     {
-        ns::nested_filter<float, 4, true, ns::SummatorType::KBN, 3, 5> _nested_filter{2, 4};
+        // ns::nested_filter<float, 4, true, ns::SummatorType::KBN, 3, 5> _nested_filter{2, 4};
+        ns::nested_filterf<4, 3, 5> _nested_filter{2, 4};
 
         REQUIRE(_nested_filter.isReady() == false);
         _nested_filter.fill(1.0f);
@@ -292,7 +293,9 @@ TEST_CASE("Testing sized_queue class", "[sized_queue]")
 
     SECTION("nested_shaper")
     {
-        ns::nested_shaper<2, float, 3, true, ns::SummatorType::KBN, 3, 5> _nested_shaper{2, 4};
+        // ns::nested_shaper<2, float, 3, true, ns::SummatorType::KBN, 3, 5> _nested_shaper{2, 4};
+        ns::nested_shaperf<2, 3, 3, 5> _nested_shaper{2, 4};
+
         REQUIRE(_nested_shaper.isReady() == false);
         const float input[] = {1.0f, 0.0f};
         _nested_shaper.fill(input);
