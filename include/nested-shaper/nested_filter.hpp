@@ -6,7 +6,6 @@
 
 namespace ns
 {
-    // A nested moving average filter
     template <typename T, size_t Depth, bool Recursive, SummatorType summatorType, size_t... Capacities>
     class nested_filter : protected average_filter<T, Depth, Recursive, summatorType>
     {

@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.15)
 
 project(
     nested-shaper
-    VERSION 0.8.0
+    VERSION 0.9.0
     LANGUAGES CXX
 )
 
 option(BUILD_UNIT_TEST "Build unit test (uses catch2)" OFF)
+option(BUILD_EXAMPLES "Build examples (uses Matplot++)" OFF)
 
 # Enforce Cpp Standard
 set(CMAKE_CXX_STANDARD 11)
@@ -24,6 +25,10 @@ add_library(${PROJECT_NAME}::nested-shaper ALIAS nested-shaper)
 
 if(BUILD_UNIT_TEST)
   add_subdirectory(test)
+endif()
+
+if(BUILD_EXAMPLES)
+  add_subdirectory(examples)
 endif()
 
 # Set common compiler warnings

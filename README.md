@@ -28,6 +28,11 @@
 - *nested-shaper* uses [Catch2](https://github.com/catchorg/Catch2) for using testing.
 - Turn on the CMake **BUILD_UNIT_TEST** option
 
+### Examples
+- *nested-shaper* uses [Matplot++](https://github.com/alandefreitas/matplotplusplus) for examples (for algorithm visualization).
+- Turn on the CMake **BUILD_EXAMPLES** option
+- Install gnuplot and add bin folder to your PATH.
+
 ## License
 This project is licensed under the [Unlicense](https://unlicense.org/) - see the
 [LICENSE](LICENSE) file for details
