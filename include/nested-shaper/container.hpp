@@ -44,6 +44,11 @@ namespace ns
     class filter : virtual public queue<T>
     {
     public:
+        using value_type = typename queue<T>::value_type;
+        using reference = typename queue<T>::reference;
+        using const_reference = typename queue<T>::const_reference;
+        using size_type = typename queue<T>::size_type;
+
         // Calculate filter results on current queue.
         virtual value_type get() const = 0;
         // Push and calculate filter.

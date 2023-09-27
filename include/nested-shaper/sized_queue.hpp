@@ -8,6 +8,11 @@ namespace ns
     class sized_queue : virtual public queue<T>
     {
     public:
+        using value_type = typename queue<T>::value_type;
+        using reference = typename queue<T>::reference;
+        using const_reference = typename queue<T>::const_reference;
+        using size_type = typename queue<T>::size_type;
+
         sized_queue();
         sized_queue(const size_type &max_size);
         sized_queue(const sized_queue &rhs);

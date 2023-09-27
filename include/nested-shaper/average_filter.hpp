@@ -10,6 +10,11 @@ namespace ns
     class average_filter : public sized_queue<T, Capacity>, public filter<T>
     {
     public:
+        using value_type = typename queue<T>::value_type;
+        using reference = typename queue<T>::reference;
+        using const_reference = typename queue<T>::const_reference;
+        using size_type = typename queue<T>::size_type;
+
         average_filter();
         average_filter(const size_type &max_size);
         average_filter(const average_filter &rhs);
@@ -33,6 +38,11 @@ namespace ns
     class average_filter<T, Capacity, false, type> : public sized_queue<T, Capacity>, public filter<T>
     {
     public:
+        using value_type = typename queue<T>::value_type;
+        using reference = typename queue<T>::reference;
+        using const_reference = typename queue<T>::const_reference;
+        using size_type = typename queue<T>::size_type;
+
         average_filter();
         average_filter(const size_type &max_size);
         average_filter(const average_filter &rhs);
@@ -106,14 +116,14 @@ namespace ns
     T average_filter<T, Capacity, false, summatorType>::get() const
     {
         summator<T, summatorType> _summator;
-        if (full())
+        if (sized_queue<T, Capacity>::full())
         {
-            for (size_t i = 0; i < size(); i++)
-                _summator += _data[i];
+            for (size_t i = 0; i < sized_queue<T, Capacity>::size(); i++)
+                _summator += sized_queue<T, Capacity>::_data[i];
         }
         else
         {
-            for (size_t i = 0; i < size(); i++)
+            for (size_t i = 0; i < sized_queue<T, Capacity>::size(); i++)
                 _summator += sized_queue<T, Capacity>::back(i);
         }
         return _summator.get() / static_cast<T>(sized_queue<T, Capacity>::size());
