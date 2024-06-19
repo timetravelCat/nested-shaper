@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 TEST_CASE("Testing sized_queue class", "[sized_queue]")
 {

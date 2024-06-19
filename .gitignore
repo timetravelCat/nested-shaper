@@ -1,13 +1,11 @@
-[Bb]uild/*
-[Dd]ocs/*
-
 ### CMake ###
+build
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-# Makefile
+!Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -18,36 +16,31 @@ _deps
 # External projects
 *-prefix/
 
-### C++ ###
-# Prerequisites
-*.d
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# Local History for Visual Studio Code
+.history/
 
-# Precompiled Headers
-*.gch
-*.pch
+# Built Visual Studio Code Extensions
+*.vsix
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
-# Fortran module files
-*.mod
-*.smod
+### MkDocs ###
+site
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+### Kconfig ###
+*.config
+*.config.old
 
-# Executables
-*.exe
-*.out
-*.app
+### dummy file ###
+dummy.cpp
