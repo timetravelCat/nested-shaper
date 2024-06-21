@@ -22,5 +22,6 @@ extra_javascript:
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
-  - Home: index.md
-  # - Guide: guide.md
+  - Introduction: introduction.md
+  - Theory: theory.md
+  - Advanced Guide: advanced_guide.md
