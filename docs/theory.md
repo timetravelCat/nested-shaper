@@ -1,6 +1,6 @@
 # Theory inside nested-shaper
-<!-- https://brianmcfee.net/dstbook-site/content/ch10-convtheorem/ConvolutionTheorem.html -->
-### Definitions of Convolution
+
+### Definitions of [Convolution](https://brianmcfee.net/dstbook-site/content/ch10-convtheorem/ConvolutionTheorem.html)
 
 $$
 h(t) = \int_{-\infty}^{\infty}f(x)g(t-x)dx=f(t)*g(t) \tag{continuous domain}
@@ -10,11 +10,15 @@ $$
 h[n] = (f*g)[n]=\sum_{i=0}^{K-1}f[k] \cdot g[n-k] \tag{discrete domain}
 $$
 
+----------------------------------------------
+
 ### The Convolution Theorem
 
 $$
 h = f * g \iff H[m] = F[m] \cdot G[m] \iff H(s)= F(s)G(s)
 $$
+
+----------------------------------------------
 
 ### Step and SMA function in frequency domain
 
@@ -42,8 +46,9 @@ H(t)=\begin{cases}
 \end{cases}
 $$
 
-### Laplace transforms used in this theory
-<!-- https://www.vyssotski.ch/BasicsOfInstrumentation/LaplaceTransform.pdf -->
+----------------------------------------------
+
+### [Laplace transforms](https://www.vyssotski.ch/BasicsOfInstrumentation/LaplaceTransform.pdf) used in this theory
 
 $$
 \mathcal{L}\{t^{n}\}=\frac{n!}{s^{n+1}} \tag{3}
@@ -56,6 +61,8 @@ $$
 $$
 \mathcal{L}\{f(t-a)H(t-a)\}=e^{-as}\mathcal{L}\{f(t)\} \tag{5}
 $$
+
+----------------------------------------------
 
 ## Step function with nested SMA.
 
@@ -98,6 +105,45 @@ $$
 
 (10) implies the derivative of results, is always smaller than initial amplitude / nested SMA's amplitude. 
 
+If we generalize the results in case of SMAs have different amplitude, 
 
-<!-- ## Implement (recursive / batch) -->
-<!-- ## Kahan summation algorithm, Kahan–Babuška algorithm -->
+$$
+\frac{d^k r(t)}{dt^k} \leq \frac{A}{\prod_{n=1}^{k} T_{n}}
+$$
+
+----------------------------------------------
+
+### Implementation details about SMA
+The mean over last N data-points calculated as 
+
+$$
+y[n] = \frac{1}{N}\sum_{i=0}^{N-1}x[n-i] \tag{11}
+$$
+
+Iterating all over the N data points is computationally expensive. 
+However, averaging all data at each time will provide a numerically stable results in long time calculation.
+Other way to calculate SMA is (called as recursive/cumulative),
+
+$$ 
+y[n+1] = y[n] + \frac{1}{N}(x[n+1]-x[n-k+1])
+$$
+
+Calculating SMA by cumulative method suffers from numerical error on long time operation. 
+In order to minimize numerical error, i implemented [Kahan summation and Kahan–Babuška algorithm](https://en.wikipedia.org/wiki/Kahan_summation_algorithm). 
+
+
+### averaging angles, quaternions, rotation matrices.
+What if samples are on the different algebra space? For example, we should use [circular mean](https://en.wikipedia.org/wiki/Circular_mean) for angle. 
+
+$$
+\bar{\alpha} = \text{atan2}(\frac{1}{n}\sum^n_{j=1} \text{sin} (\alpha_{j}), \sum^n_{j=1} \text{cos} (\alpha_{j}))
+$$
+
+
+--- WIP --- 
+
+Cumulative implementations on angles
+
+**nested-shaper** supports cumulative method on quaternions and rotation matrices.
+
+----------------------------------------------
