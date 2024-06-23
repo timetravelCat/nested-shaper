@@ -61,10 +61,11 @@ public:
      * given value is convoluted with the metrics.
      * returns the convoluted value.
      */
-    Type convolute(const Type& value, const Metrics& metrics = Metrics{});
+    Type convolute(const Type& value);
 
 protected:
-    Type mean{}; // Mean(average) value
+    Type mean{};       // Mean(average) value
+    Metrics metrics{}; // Metrics functor
 
     using Queue<Type, Extent>::fill;
     using Queue<Type, Extent>::_data;
@@ -83,6 +84,7 @@ protected:
 template<typename Type, size_t Extent, typename Metrics>
 void MovingMetrics<Type, Extent, Metrics>::initialize(const Type& value) {
     mean = value;
+    metrics = Metrics{};
     fill(value);
 };
 
@@ -93,7 +95,7 @@ void MovingMetrics<Type, Extent, Metrics>::initialize(const Type& value, const s
 };
 
 template<typename Type, size_t Extent, typename Metrics>
-Type MovingMetrics<Type, Extent, Metrics>::convolute(const Type& value, const Metrics& metrics) {
+Type MovingMetrics<Type, Extent, Metrics>::convolute(const Type& value) {
     mean = metrics.template
            operator()(mean,
                       push(value),
@@ -136,8 +138,8 @@ struct MovingMetricsNested {
         moving_metrics_nested.initialize(value, capacities...);
     }
 
-    inline Type convolute(const Type& value, const Metrics& metrics = Metrics{}) {
-        return moving_metrics_nested.convolute(moving_metrics.convolute(value, metrics));
+    inline Type convolute(const Type& value) {
+        return moving_metrics_nested.convolute(moving_metrics.convolute(value));
     }
 
     MovingMetrics<Type, Extent, Metrics> moving_metrics;
@@ -160,8 +162,8 @@ struct MovingMetricsNested<Type, Metrics, Extent> {
         moving_metrics.initialize(value, capacity);
     };
 
-    inline Type convolute(const Type& value, const Metrics& metrics = Metrics{}) {
-        return moving_metrics.convolute(value, metrics);
+    inline Type convolute(const Type& value) {
+        return moving_metrics.convolute(value);
     };
 
     MovingMetrics<Type, Extent, Metrics> moving_metrics;

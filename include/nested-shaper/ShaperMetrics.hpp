@@ -65,11 +65,10 @@ public:
     /**
      * Convolute
      */
-    auto convolute(const Type& input,
-                   const DerivativeMetrics& derivative_metrics = DerivativeMetrics{},
-                   const MeanMetrics& mean_metrics = MeanMetrics{});
+    auto convolute(const Type& input);
 
 protected:
+    DerivativeMetrics derivative_metrics{}; // DerivativeMetrics functor
     using Queue<Type, Extent>::fill;
 };
 
@@ -88,6 +87,7 @@ Queue<Type, Extent>(), MovingMetricsNested<Type, MeanMetrics, Extents...>(value,
 
 template<typename Type, typename DerivativeMetrics, size_t Extent, typename MeanMetrics, size_t... Extents>
 void ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::initialize(const Type& value) {
+    derivative_metrics = DerivativeMetrics{};
     fill(value);
     MovingMetricsNested<Type, MeanMetrics, Extents...>::initialize(value);
 }
@@ -95,16 +95,14 @@ void ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::in
 template<typename Type, typename DerivativeMetrics, size_t Extent, typename MeanMetrics, size_t... Extents>
 template<typename... Args>
 void ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::initialize(const Type& value, const Args&... capacities) {
+    derivative_metrics = DerivativeMetrics{};
     fill(value);
     MovingMetricsNested<Type, MeanMetrics, Extents...>::initialize(value, capacities...);
 }
 
 template<typename Type, typename DerivativeMetrics, size_t Extent, typename MeanMetrics, size_t... Extents>
-auto ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::convolute(
-  const Type& input,
-  const DerivativeMetrics& derivative_metrics,
-  const MeanMetrics& mean_metrics) {
-    Queue<Type, Extent>::push(MovingMetricsNested<Type, MeanMetrics, Extents...>::convolute(input, mean_metrics));
+auto ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::convolute(const Type& input) {
+    Queue<Type, Extent>::push(MovingMetricsNested<Type, MeanMetrics, Extents...>::convolute(input));
     return derivative_metrics.template operator()(Queue<Type, Extent>::cbegin(),
                                                   Queue<Type, Extent>::cend(),
                                                   Queue<Type, Extent>::size());
