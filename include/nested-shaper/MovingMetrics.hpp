@@ -22,9 +22,8 @@ namespace ns {
  * 
  * template<typename Type>
  *   struct EmptyMetrics {
- *   Type operator()(const Type& popped, const Type& pushed, const Type& mean, const size_t& size) const { return mean; }
  *   template<typename Iterator>
- *   Type operator()(Iterator begin, Iterator end, const Type& mean, const size_t& size) const { return mean; }
+ *   Type operator()(const Type& mean, const Type& popped, const Type& pushed, Iterator begin, Iterator end, const size_t& size) const { return mean; }
  * };
  */
 template<typename Type, size_t Extent, typename Metrics>
@@ -100,9 +99,13 @@ void MovingMetrics<Type, Extent, Metrics>::initialize(const Type& value, const s
 
 template<typename Type, size_t Extent, typename Metrics>
 Type MovingMetrics<Type, Extent, Metrics>::convolute(const Type& value, const Metrics& metrics) {
-    const Type popped = push(value);
-    mean = metrics.template operator()(popped, value, mean, _size);
-    mean = metrics.template operator()(Queue<Type, Extent>::cbegin(), Queue<Type, Extent>::cend(), mean, _size);
+    mean = metrics.template
+           operator()(mean,
+                      push(value),
+                      value,
+                      Queue<Type, Extent>::cbegin(),
+                      Queue<Type, Extent>::cend(),
+                      _size);
     return mean;
 };
 
