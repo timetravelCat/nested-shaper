@@ -70,6 +70,11 @@ public:
     void push(const value_type& value);
 
     /**
+     * Fill the queue with given value.
+     */
+    void fill(const value_type& value);
+
+    /**
      * Iterator class, allows to iterate over the queue.
      */
     struct ConstIterator {
@@ -267,5 +272,16 @@ void Queue<Type, Extent>::push(const value_type& value) {
     ++_size;
     _front == _data + _capacity - 1 ? _front = _data : _front++;
     *_front = value;
+}
+
+template<typename Type, size_t Extent>
+void Queue<Type, Extent>::fill(const value_type& value) {
+    _size = _capacity;
+    _back = _data;
+    _front = _data + _capacity - 1;
+
+    for(size_type i = 0; i < _capacity; ++i) {
+        _data[i] = value;
+    }
 }
 }; // namespace ns

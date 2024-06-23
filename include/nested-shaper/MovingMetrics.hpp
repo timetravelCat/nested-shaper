@@ -66,6 +66,7 @@ public:
 protected:
     Type mean{}; // Mean(average) value
 
+    using Queue<Type, Extent>::fill;
     using Queue<Type, Extent>::_data;
     using Queue<Type, Extent>::_capacity;
     using Queue<Type, Extent>::_size;
@@ -82,13 +83,7 @@ protected:
 template<typename Type, size_t Extent, typename Metrics>
 void MovingMetrics<Type, Extent, Metrics>::initialize(const Type& value) {
     mean = value;
-    _size = _capacity;
-    _back = _data;
-    _front = _data + _capacity - 1;
-
-    for(size_t i = 0; i < _capacity; i++) {
-        _data[i] = mean;
-    }
+    fill(value);
 };
 
 template<typename Type, size_t Extent, typename Metrics>

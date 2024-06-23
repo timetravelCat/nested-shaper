@@ -150,4 +150,15 @@ TEST_CASE("Queue", "[Queue]") {
             REQUIRE(*citer == i + 1);
         }
     }
+
+    SECTION("Fill") {
+        Queue<int, 4> q;
+        q.fill(1);
+        REQUIRE(q.front() == 1);
+        REQUIRE(q.back() == 1);
+
+        q.fill(2);
+        REQUIRE(q.front() == 2);
+        REQUIRE(q.back() == 2);
+    };
 }
