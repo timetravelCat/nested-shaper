@@ -117,4 +117,58 @@ Type MovingMetrics<Type, Extent, Metrics>::push(const Type& value) {
     *_front = value;
     return result;
 };
+
+// Helper class for MovingMetrics
+template<typename Type, typename Metrics, size_t Extent, size_t... Extents>
+struct MovingMetricsNested {
+    explicit MovingMetricsNested(const Type& value) :
+    moving_metrics(value), moving_metrics_nested(value) {}
+    template<typename Arg, typename... Args>
+    explicit MovingMetricsNested(const Type& value, const Arg& capacity, const Args&... capacities) :
+    moving_metrics(value, capacity), moving_metrics_nested(value, capacities...) {
+        static_assert(sizeof...(capacities) == sizeof...(Extents), "Number of capacities must be equal to number of extents.");
+    }
+
+    inline void initialize(const Type& value) {
+        moving_metrics.initialize(value);
+        moving_metrics_nested.initialize(value);
+    }
+
+    template<typename... Args>
+    inline void initialize(const Type& value, const size_t& capacity, const Args&... capacities) {
+        static_assert(sizeof...(capacities) == sizeof...(Extents), "Number of capacities must be equal to number of extents.");
+        moving_metrics.initialize(value, capacity);
+        moving_metrics_nested.initialize(value, capacities...);
+    }
+
+    inline Type convolute(const Type& value, const Metrics& metrics = Metrics{}) {
+        return moving_metrics_nested.convolute(moving_metrics.convolute(value, metrics));
+    }
+
+    MovingMetrics<Type, Extent, Metrics> moving_metrics;
+    MovingMetricsNested<Type, Metrics, Extents...> moving_metrics_nested;
+};
+
+template<typename Type, typename Metrics, size_t Extent>
+struct MovingMetricsNested<Type, Metrics, Extent> {
+    explicit MovingMetricsNested(const Type& value) :
+    moving_metrics(value) {}
+    template<typename Arg>
+    explicit MovingMetricsNested(const Type& value, const Arg& capacity) :
+    moving_metrics(value, capacity) {}
+
+    inline void initialize(const Type& value) {
+        moving_metrics.initialize(value);
+    };
+
+    inline void initialize(const Type& value, const size_t& capacity) {
+        moving_metrics.initialize(value, capacity);
+    };
+
+    inline Type convolute(const Type& value, const Metrics& metrics = Metrics{}) {
+        return moving_metrics.convolute(value, metrics);
+    };
+
+    MovingMetrics<Type, Extent, Metrics> moving_metrics;
+};
 }; // namespace ns

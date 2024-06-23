@@ -40,3 +40,29 @@ TEST_CASE("MovingMetrics") {
         REQUIRE(mm2.convolute(33) == 33);
     }
 }
+
+TEST_CASE("MovingMetricsNested") {
+    SECTION("Constructor") {
+        MovingMetricsNested<int, EmptyMetrics<int>, 4, 8> mmn1{11};
+        REQUIRE(mmn1.moving_metrics.capacity() == 4);
+        REQUIRE(mmn1.moving_metrics_nested.moving_metrics.capacity() == 8);
+        REQUIRE(mmn1.convolute(11) == 11);
+
+        MovingMetricsNested<int, EmptyMetrics<int>, 4, 8> mmn2{8, 2U, 5U};
+        REQUIRE(mmn2.moving_metrics.capacity() == 2);
+        REQUIRE(mmn2.moving_metrics_nested.moving_metrics.capacity() == 5);
+        REQUIRE(mmn2.convolute(8) == 8);
+    }
+
+    SECTION("Initialize") {
+        MovingMetricsNested<int, EmptyMetrics<int>, 4, 8> mmn1{11};
+        mmn1.initialize(22);
+        REQUIRE(mmn1.convolute(22) == 22);
+
+        MovingMetricsNested<int, EmptyMetrics<int>, 4, 8> mmn2{8, 2U, 5U};
+        mmn2.initialize(33, 2U, 7U);
+        REQUIRE(mmn2.moving_metrics.capacity() == 2);
+        REQUIRE(mmn2.moving_metrics_nested.moving_metrics.capacity() == 7);
+        REQUIRE(mmn2.convolute(33) == 33);
+    }
+}
