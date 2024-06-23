@@ -129,25 +129,53 @@ TEST_CASE("Queue", "[Queue]") {
     }
 
     SECTION("Iterators") {
-        Queue<int, 4> q;
+        Queue<int, 5> q;
         q.push(1);
         q.push(2);
         q.push(3);
         q.push(4);
         q.push(5);
+        q.push(6);
         q.pop();
         q.pop();
+        // Queue contains 4, 5, 6
 
-        Queue<int, 4>::Iterator iter = q.begin();
-        for(int i = 4; iter != q.end(); ++iter, ++i) {
-            REQUIRE(*iter == i);
-            *iter += 1;
-            REQUIRE(*iter == i + 1);
+        QueueIterator<int> forwardIterator = q.forwardIterator();
+        REQUIRE(*(forwardIterator + 1U) == 5);
+        REQUIRE(*(forwardIterator + 2U) == 6);
+
+        for(size_t i = 0; i < forwardIterator.size; ++i, ++forwardIterator) {
+            REQUIRE(*forwardIterator == int(i) + 4);
+            *forwardIterator += 1;
+            REQUIRE(*forwardIterator == int(i) + 5);
+            *forwardIterator -= 1;
         }
 
-        Queue<int, 4>::ConstIterator citer = q.cbegin();
-        for(int i = 4; citer != q.cend(); ++citer, ++i) {
-            REQUIRE(*citer == i + 1);
+        QueueIterator<int> backwardIterator = q.backwardIterator();
+        REQUIRE(*(backwardIterator - 1U) == 5);
+        REQUIRE(*(backwardIterator - 2U) == 4);
+
+        for(size_t i = 0; i < backwardIterator.size; ++i, --backwardIterator) {
+            REQUIRE(*backwardIterator == 6 - int(i));
+            *backwardIterator += 1;
+            REQUIRE(*backwardIterator == 7 - int(i));
+            *backwardIterator -= 1;
+        }
+
+        QueueConstIterator<int> forwardConstIterator = q.forwardConstIterator();
+        REQUIRE(*(forwardConstIterator + 1U) == 5);
+        REQUIRE(*(forwardConstIterator + 2U) == 6);
+
+        for(size_t i = 0; i < forwardConstIterator.size; ++i, ++forwardConstIterator) {
+            REQUIRE(*forwardConstIterator == int(i) + 4);
+        }
+
+        QueueConstIterator<int> backwardConstIterator = q.backwardConstIterator();
+        REQUIRE(*(backwardConstIterator - 1U) == 5);
+        REQUIRE(*(backwardConstIterator - 2U) == 4);
+
+        for(size_t i = 0; i < backwardConstIterator.size; ++i, --backwardConstIterator) {
+            REQUIRE(*backwardConstIterator == 6 - int(i));
         }
     }
 

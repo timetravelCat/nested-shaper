@@ -6,14 +6,16 @@ using namespace ns;
 
 template<typename Type>
 struct EmptyMetrics {
-    template<typename Iterator>
-    Type operator()(const Type& mean, const Type& popped, const Type& pushed, Iterator begin, Iterator end, const size_t& size) const {
+    Type operator()(const Type& mean,
+                    const Type& popped,
+                    const Type& pushed,
+                    QueueConstIterator<Type> forwardIterator,
+                    QueueConstIterator<Type> backwardIterator) const {
         (void)mean;
         (void)popped;
         (void)pushed;
-        (void)begin;
-        (void)end;
-        (void)size;
+        (void)forwardIterator;
+        (void)backwardIterator;
         return mean;
     }
 };

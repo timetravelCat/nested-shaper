@@ -22,8 +22,7 @@ namespace ns {
  * 
  * template<typename Type>
  *   struct EmptyMetrics {
- *   template<typename Iterator>
- *   Type operator()(const Type& mean, const Type& popped, const Type& pushed, Iterator begin, Iterator end, const size_t& size) const { return mean; }
+ *   Type operator()(const Type& mean, const Type& popped, const Type& pushed, QueueConstIterator<Type> forwardIterator, QueueConstIterator<Type> backwardIterator) const { return mean; }
  * };
  */
 template<typename Type, size_t Extent, typename Metrics>
@@ -100,9 +99,8 @@ Type MovingMetrics<Type, Extent, Metrics>::convolute(const Type& value) {
            operator()(mean,
                       push(value),
                       value,
-                      Queue<Type, Extent>::cbegin(),
-                      Queue<Type, Extent>::cend(),
-                      _size);
+                      Queue<Type, Extent>::forwardConstIterator(),
+                      Queue<Type, Extent>::backwardConstIterator());
     return mean;
 };
 

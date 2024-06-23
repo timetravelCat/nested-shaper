@@ -6,48 +6,51 @@ using namespace ns;
 
 template<typename Type>
 struct EmptyMeanMetrics {
-    template<typename Iterator>
-    Type operator()(const Type& mean, const Type& popped, const Type& pushed, Iterator begin, Iterator end, const size_t& size) const {
+    Type operator()(const Type& mean,
+                    const Type& popped,
+                    const Type& pushed,
+                    QueueConstIterator<Type> forwardIterator,
+                    QueueConstIterator<Type> backwardIterator) const {
         (void)mean;
         (void)popped;
         (void)pushed;
-        (void)begin;
-        (void)end;
-        (void)size;
+        (void)forwardIterator;
+        (void)backwardIterator;
         return mean;
     }
 };
 
-template<typename Type>
-struct EmptyDerivateMetrics {
-    template<typename Iterator>
-    Type* operator()(Iterator begin, Iterator end, const size_t& size) const {
-        (void)begin;
-        (void)end;
-        (void)size;
+template<typename Type, typename TimeType>
+struct EmptyDerivativeMetrics {
+    Type* operator()(QueueConstIterator<Type> forwardIterator,
+                     QueueConstIterator<Type> backwardIterator,
+                     const TimeType& dt) const {
+        (void)forwardIterator;
+        (void)backwardIterator;
+        (void)dt;
         return nullptr;
     }
 };
 
 TEST_CASE("ShaperMetrics.hpp") {
     SECTION("Constructor") {
-        ShaperMetrics<int, EmptyDerivateMetrics<int>, 4, EmptyMeanMetrics<int>, 7, 3, 11> sm1{71};
+        ShaperMetrics<int, EmptyDerivativeMetrics<int, float>, 4, EmptyMeanMetrics<int>, 7, 3, 11> sm1{71};
         REQUIRE(sm1.capacity() == 4);
-        REQUIRE(sm1.convolute(71) == nullptr);
+        REQUIRE(sm1.convolute(71, 0.1f) == nullptr);
 
-        ShaperMetrics<int, EmptyDerivateMetrics<int>, 5, EmptyMeanMetrics<int>, 7, 3, 11> sm2{71, 5U, 2U, 8U};
+        ShaperMetrics<int, EmptyDerivativeMetrics<int, float>, 5, EmptyMeanMetrics<int>, 7, 3, 11> sm2{71, 5U, 2U, 8U};
         REQUIRE(sm2.capacity() == 5);
-        REQUIRE(sm2.convolute(71) == nullptr);
+        REQUIRE(sm2.convolute(71, 0.1f) == nullptr);
     }
 
     SECTION("Initialize") {
-        ShaperMetrics<int, EmptyDerivateMetrics<int>, 4, EmptyMeanMetrics<int>, 7, 3, 11> sm1{71};
+        ShaperMetrics<int, EmptyDerivativeMetrics<int, float>, 4, EmptyMeanMetrics<int>, 7, 3, 11> sm1{71};
         sm1.initialize(72);
-        REQUIRE(sm1.convolute(72) == nullptr);
+        REQUIRE(sm1.convolute(72, 0.1f) == nullptr);
 
-        ShaperMetrics<int, EmptyDerivateMetrics<int>, 5, EmptyMeanMetrics<int>, 7, 3, 11> sm2{71, 5U, 2U, 8U};
+        ShaperMetrics<int, EmptyDerivativeMetrics<int, float>, 5, EmptyMeanMetrics<int>, 7, 3, 11> sm2{71, 5U, 2U, 8U};
         sm2.initialize(73, 5U, 2U, 8U);
         REQUIRE(sm2.capacity() == 5);
-        REQUIRE(sm2.convolute(73) == nullptr);
+        REQUIRE(sm2.convolute(73, 0.1f) == nullptr);
     }
 }

@@ -14,6 +14,11 @@
 #include <assert.h>
 
 namespace ns {
+template<typename Type>
+struct QueueIterator;
+template<typename Type>
+struct QueueConstIterator;
+
 /**
  * @class Queue
  * 
@@ -30,6 +35,11 @@ public:
     using const_reference = const Type&;
     using size_type = size_t;
     static constexpr size_type extent = Extent;
+
+    template<typename _Type>
+    friend struct QueueIterator;
+    template<typename _Type>
+    friend struct QueueConstIterator;
 
     /**
      * Constructors
@@ -75,101 +85,16 @@ public:
     void fill(const value_type& value);
 
     /**
-     * Iterator class, allows to iterate over the queue.
+     * Iterators
+     * 
+     * Warnings : 
+     * forwardIterator should use ++ or + operator.
+     * backwardIterator should use -- or - operator.
      */
-    struct ConstIterator {
-        explicit ConstIterator(const Queue& queue, const value_type* _ptr) :
-        size(queue._size),
-        ptr(_ptr),
-        pBegin(queue._data),
-        pEnd(queue._data + queue._capacity) {}
-
-        inline const_reference operator*() const { return *ptr; }
-        inline ConstIterator& operator++() {
-            if(++ptr == pEnd)
-                ptr = pBegin;
-
-            ++counter;
-            return *this;
-        }
-        inline ConstIterator operator++(int) {
-            ConstIterator tmp(*this);
-            operator++();
-            return tmp;
-        }
-        inline bool operator==(const ConstIterator& other) const {
-            return ptr == other.ptr;
-        }
-        inline bool operator!=(const ConstIterator& other) const {
-            if(size == 0) {
-                return false;
-            }
-
-            if(counter == 0) {
-                return true;
-            }
-
-            return ptr != other.ptr;
-        }
-
-    private:
-        size_type counter{0};
-        const size_type size;
-        const value_type* ptr;
-        const value_type* const pBegin;
-        const value_type* const pEnd;
-    };
-
-    struct Iterator {
-        explicit Iterator(Queue& queue, value_type* _ptr) :
-        size(queue._size),
-        ptr(_ptr),
-        pBegin(queue._data),
-        pEnd(queue._data + queue._capacity) {}
-
-        inline reference operator*() const { return *ptr; }
-        inline Iterator& operator++() {
-            if(++ptr == pEnd)
-                ptr = pBegin;
-
-            ++counter;
-            return *this;
-        }
-        inline Iterator operator++(int) {
-            Iterator tmp(*this);
-            operator++();
-            return tmp;
-        }
-        inline bool operator==(const Iterator& other) const {
-            return ptr == other.ptr;
-        }
-        inline bool operator!=(const Iterator& other) const {
-            if(size == 0) {
-                return false;
-            }
-
-            if(counter == 0) {
-                return true;
-            }
-
-            return ptr != other.ptr;
-        }
-
-    private:
-        size_type counter{0};
-        const size_type size;
-        value_type* ptr;
-        value_type* pBegin;
-        value_type* pEnd;
-    };
-
-    /**
-     * Begin and End
-     */
-    inline ConstIterator cbegin() const { return ConstIterator{*this, _back}; }
-    inline ConstIterator cend() const { return ConstIterator{*this, ((_front + 1) == (_data + _capacity)) ? _data : _front + 1}; }
-    inline Iterator begin() { return Iterator(*this, _back); }
-    inline Iterator end() { return Iterator(*this, ((_front + 1) == (_data + _capacity)) ? _data : _front + 1); }
+    inline QueueIterator<Type> forwardIterator() { return QueueIterator<Type>(*this, _back); }
+    inline QueueIterator<Type> backwardIterator() { return QueueIterator<Type>(*this, _front); }
+    inline QueueConstIterator<Type> forwardConstIterator() const { return QueueConstIterator<Type>{*this, _back}; }
+    inline QueueConstIterator<Type> backwardConstIterator() const { return QueueConstIterator<Type>{*this, _front}; }
 
 protected:
     value_type _data[Extent]{};
@@ -284,4 +209,130 @@ void Queue<Type, Extent>::fill(const value_type& value) {
         _data[i] = value;
     }
 }
+
+/**
+ * Iterator of circular buffer.
+ */
+template<typename Type>
+struct QueueIterator {
+    template<size_t Extent>
+    explicit QueueIterator(Queue<Type, Extent>& queue, Type* _ptr) :
+    size(queue._size), ptr(_ptr), pBegin(queue._data), pEnd(queue._data + queue.extent) {}
+    QueueIterator(const QueueIterator&) = default;
+    QueueIterator(const QueueIterator<Type>& other, Type* _ptr) :
+    size(other.size), ptr(_ptr), pBegin(other.pBegin), pEnd(other.pEnd) {}
+
+    inline Type& operator*() const { return *ptr; }
+
+    inline QueueIterator& operator++() {
+        if(++ptr == pEnd) {
+            ptr = pBegin;
+        }
+
+        return *this;
+    }
+    inline QueueIterator operator++(int) {
+        QueueIterator tmp(*this);
+        operator++();
+        return tmp;
+    }
+    inline QueueIterator& operator--() {
+        if(--ptr < pBegin) {
+            ptr = pEnd - 1U;
+        }
+
+        return *this;
+    }
+    inline QueueIterator operator--(int) {
+        QueueIterator tmp(*this);
+        operator--();
+        return tmp;
+    }
+
+    inline QueueIterator operator+(const size_t& n) const {
+        return QueueIterator{*this, (ptr + n >= pEnd) ? pBegin + (ptr + n - pEnd) : ptr + n};
+    }
+    inline void operator+=(const size_t& n) {
+        ptr = (ptr + n >= pEnd) ? pBegin + (ptr + n - pEnd) : ptr + n;
+    }
+    inline QueueIterator operator-(const size_t& n) const {
+        return QueueIterator{*this, (ptr < pBegin + n) ? pEnd - (pBegin + n - ptr) : ptr - n};
+    }
+    inline void operator-=(const size_t& n) {
+        ptr = (ptr < pBegin + n) ? pEnd - (pBegin + n - ptr) : ptr - n;
+    }
+
+    inline bool operator==(const QueueIterator& other) const {
+        return ptr == other.ptr;
+    }
+
+    const size_t size;
+
+private:
+    Type* ptr;
+    Type* pBegin;
+    Type* pEnd;
+};
+
+template<typename Type>
+struct QueueConstIterator {
+    template<size_t Extent>
+    explicit QueueConstIterator(const Queue<Type, Extent>& queue, const Type* _ptr) :
+    size(queue._size), ptr(_ptr), pBegin(queue._data), pEnd(queue._data + queue.extent) {}
+    QueueConstIterator(const QueueConstIterator&) = default;
+    QueueConstIterator(const QueueConstIterator<Type>& other, const Type* _ptr) :
+    size(other.size), ptr(_ptr), pBegin(other.pBegin), pEnd(other.pEnd) {}
+
+    inline const Type& operator*() const { return *ptr; }
+
+    inline QueueConstIterator& operator++() {
+        if(++ptr == pEnd) {
+            ptr = pBegin;
+        }
+
+        return *this;
+    }
+    inline QueueConstIterator operator++(int) {
+        QueueConstIterator tmp(*this);
+        operator++();
+        return tmp;
+    }
+    inline QueueConstIterator& operator--() {
+        if(--ptr < pBegin) {
+            ptr = pEnd - 1U;
+        }
+
+        return *this;
+    }
+    inline QueueConstIterator operator--(int) {
+        QueueConstIterator tmp(*this);
+        operator--();
+        return tmp;
+    }
+
+    inline QueueConstIterator operator+(const size_t& n) const {
+        return QueueConstIterator{*this, (ptr + n >= pEnd) ? pBegin + (ptr + n - pEnd) : ptr + n};
+    }
+    inline void operator+=(const size_t& n) {
+        ptr = (ptr + n >= pEnd) ? pBegin + (ptr + n - pEnd) : ptr + n;
+    }
+    inline QueueConstIterator operator-(const size_t& n) const {
+        return QueueConstIterator{*this, (ptr < pBegin + n) ? pEnd - (pBegin + n - ptr) : ptr - n};
+    }
+    inline void operator-=(const size_t& n) {
+        ptr = (ptr < pBegin + n) ? pEnd - (pBegin + n - ptr) : ptr - n;
+    }
+
+    inline bool operator==(const QueueConstIterator& other) const {
+        return ptr == other.ptr;
+    }
+
+    const size_t size;
+
+private:
+    const Type* ptr;
+    const Type* const pBegin;
+    const Type* const pEnd;
+};
+
 }; // namespace ns

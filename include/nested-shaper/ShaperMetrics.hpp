@@ -21,18 +21,16 @@ namespace ns {
  * MeanMetrics functor should have the following signature:
  * 
  * template<typename Type>
- * struct MeanMetrics {
- *   template<typename Iterator>
- *   Type operator()(const Type& mean, const Type& popped, const Type& pushed, Iterator begin, Iterator end, const size_t& size) const { return mean; }
+ *   struct MeanMetrics {
+ *   Type operator()(const Type& mean, const Type& popped, const Type& pushed, QueueConstIterator<Type> forwardIterator, QueueConstIterator<Type> backwardIterator) const { return mean; }
  * };
  * 
  * DerivativeMetrics is a functor that calculates the new derivative value.
  * DerivativeMetrics functor should have the following signature:
  * 
- * template<typename Type>
+ * template<typename Type, typename TimeType>
  * struct DerivativeMetrics {
- *  template<typename Iterator>
- *  ResultType operator()(Iterator begin, Iterator end, const size_t& size) const { return [as ResultType]; }
+ *  ResultType operator()(QueueConstIterator<Type> forwardIterator, QueueConstIterator<Type> backwardIterator, const TimeType& dt) const { return [as ResultType]; }
  * };
  */
 template<typename Type, typename DerivativeMetrics, size_t Extent, typename MeanMetrics, size_t... Extents>
@@ -65,7 +63,8 @@ public:
     /**
      * Convolute
      */
-    auto convolute(const Type& input);
+    template<typename TimeType>
+    auto convolute(const Type& input, const TimeType& dt);
 
 protected:
     DerivativeMetrics derivative_metrics{}; // DerivativeMetrics functor
@@ -101,10 +100,11 @@ void ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::in
 }
 
 template<typename Type, typename DerivativeMetrics, size_t Extent, typename MeanMetrics, size_t... Extents>
-auto ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::convolute(const Type& input) {
+template<typename TimeType>
+auto ShaperMetrics<Type, DerivativeMetrics, Extent, MeanMetrics, Extents...>::convolute(const Type& input, const TimeType& dt) {
     Queue<Type, Extent>::push(MovingMetricsNested<Type, MeanMetrics, Extents...>::convolute(input));
-    return derivative_metrics.template operator()(Queue<Type, Extent>::cbegin(),
-                                                  Queue<Type, Extent>::cend(),
-                                                  Queue<Type, Extent>::size());
+    return derivative_metrics.template operator()(Queue<Type, Extent>::forwardConstIterator(),
+                                                  Queue<Type, Extent>::backwardConstIterator(),
+                                                  dt);
 }
 }; // namespace ns
