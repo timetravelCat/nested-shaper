@@ -47,7 +47,11 @@ struct EuclideanMeanCumulativeMetricsArray {
         (void)pushed;
         (void)backwardIterator;
 
-        array_type sums;
+        array_type sums{};
+        for(size_t j = 0; j < N; ++j) {
+            sums[j] = Type(0);
+        }
+
         for(size_t i = 0; i < forwardIterator.size; ++i, ++forwardIterator) {
             for(size_t j = 0; j < N; ++j) {
                 sums[j] += (*forwardIterator)[j];
