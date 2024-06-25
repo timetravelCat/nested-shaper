@@ -1,7 +1,7 @@
 /**
  * @file euclidean_mean_cumulative_metrics.hpp
  * 
- * @brief This file contains the definition of the EuclideanDerivativeMetrics class.
+ * @brief This file contains the definition of the EuclideanMeanCumulativeMetrics class.
  */
 
 #pragma once
