@@ -7,6 +7,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <math.h>
 
 namespace ns {
 /**
@@ -74,5 +75,21 @@ struct array {
     static constexpr size_t size() {
         return N;
     };
+};
+
+/**
+ * @fn wrap
+ * 
+ * @brief Wrap the value between low and high.
+ */
+template<typename T>
+T wrap(const T& value, const T& low, const T& high) {
+    if(low <= value && value < high) {
+        return value;
+    }
+
+    const T range = high - low;
+    const T num_wraps = ::floor((value - low) / range);
+    return value - num_wraps * range;
 };
 }; // namespace ns

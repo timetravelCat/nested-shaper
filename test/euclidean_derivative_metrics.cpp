@@ -1,7 +1,3 @@
-
-
-#include <stdio.h>
-
 #include <nested-shaper/metrics/euclidean_derivative_metrics.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
