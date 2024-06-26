@@ -80,7 +80,7 @@ struct AngleDerivativeMetricsArray {
 
         for(size_t i = 1U; i < N; i++) {
             for(size_t j = 0; j < M; j++) {
-                angles_wrapped[i][j] = wrap((*forwardIterator)[j], angles_wrapped[i][j] - Type(M_PI), angles_wrapped[i][j] + Type(M_PI));
+                angles_wrapped[i][j] = wrap((*forwardIterator)[j], angles_wrapped[i - 1U][j] - Type(M_PI), angles_wrapped[i - 1U][j] + Type(M_PI));
             }
             ++forwardIterator;
         }
