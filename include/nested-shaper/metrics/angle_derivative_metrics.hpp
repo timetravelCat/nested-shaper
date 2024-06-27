@@ -66,8 +66,10 @@ struct AngleDerivativeMetrics<Type, 1> {
 // derivatives[i][j] : i-th dimension of j-th derivative
 template<typename Type, size_t M, size_t N>
 struct AngleDerivativeMetricsArray {
-    using array_type = array<Type, N>;
-    array<array_type, M> operator()(QueueConstIterator<array_type> forwardIterator, QueueConstIterator<array_type> backwardIterator, const Type& dt) const {
+    using array_type = array<Type, M>;
+    using derivative_type = array<array<Type, N>, M>;
+
+    derivative_type operator()(QueueConstIterator<array_type> forwardIterator, QueueConstIterator<array_type> backwardIterator, const Type& dt) const {
         assert(N == forwardIterator.size);
         assert(N == backwardIterator.size);
         (void)backwardIterator;
@@ -85,7 +87,7 @@ struct AngleDerivativeMetricsArray {
             ++forwardIterator;
         }
 
-        array<array_type, M> derivatives{};
+        derivative_type derivatives{};
         for(size_t i = 0; i < M; i++) {
             for(size_t j = 0; j < N; j++) {
                 derivatives[i][j] = Type(0);
@@ -115,15 +117,16 @@ struct AngleDerivativeMetricsArray {
 
 template<typename Type, size_t M>
 struct AngleDerivativeMetricsArray<Type, M, 1> {
-    using array_type = array<Type, 1>;
+    using array_type = array<Type, M>;
+    using derivative_type = array<array<Type, 1>, M>;
 
-    array<array_type, M> operator()(QueueConstIterator<array_type> forwardIterator, QueueConstIterator<array_type> backwardIterator, const Type& dt) const {
+   derivative_type operator()(QueueConstIterator<array_type> forwardIterator, QueueConstIterator<array_type> backwardIterator, const Type& dt) const {
         assert(1 == forwardIterator.size);
         assert(1 == backwardIterator.size);
         (void)backwardIterator;
         (void)dt;
 
-        array<array_type, M> derivatives;
+       derivative_type derivatives;
         for(size_t i = 0; i < M; i++) {
             derivatives[i][0] = (*(forwardIterator))[i];
         }
