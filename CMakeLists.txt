@@ -23,7 +23,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(BUILD_EXAMPLE "Build examples, using Matplot++" OFF)
 
 # Enforce C++11
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 
 # Library setup
@@ -37,17 +37,17 @@ target_include_directories(
 # Testing setup
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   # check c++ standard libary is included. if included,
-  # file(WRITE ${CMAKE_SOURCE_DIR}/dummy.cpp "")
-  # file(GLOB_RECURSE HEADERS include/nested-shaper/*.hpp
-  #      include/nested-shaper/**/*.hpp)
-  # foreach(HEADER ${HEADERS})
-  #   file(RELATIVE_PATH HEADER_RELATIVE ${CMAKE_SOURCE_DIR}/include ${HEADER})
-  #   file(APPEND ${CMAKE_SOURCE_DIR}/dummy.cpp "#include <${HEADER_RELATIVE}>\n")
-  # endforeach()
+  file(WRITE ${CMAKE_SOURCE_DIR}/dummy.cpp "")
+  file(GLOB_RECURSE HEADERS include/nested-shaper/*.hpp
+       include/nested-shaper/**/*.hpp)
+  foreach(HEADER ${HEADERS})
+    file(RELATIVE_PATH HEADER_RELATIVE ${CMAKE_SOURCE_DIR}/include ${HEADER})
+    file(APPEND ${CMAKE_SOURCE_DIR}/dummy.cpp "#include <${HEADER_RELATIVE}>\n")
+  endforeach()
 
-  # add_library(dummy ${CMAKE_SOURCE_DIR}/dummy.cpp)
-  # target_link_libraries(dummy ${PROJECT_NAME})
-  # add_stdlibcpp_exceptions(dummy)
+  add_library(dummy ${CMAKE_SOURCE_DIR}/dummy.cpp)
+  target_link_libraries(dummy ${PROJECT_NAME})
+  add_stdlibcpp_exceptions(dummy)
 
   option(BUILD_TESTING "" OFF) # Set to OFF by default
   include(CTest)
