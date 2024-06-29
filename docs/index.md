@@ -15,6 +15,13 @@ Instead, **nested-shaper** processes trajectory samples at specific intervals, o
 **nested-shaper** does not generate trajectories under physical constraints. 
 It smooths pre-defined trajectories and can be used in conjunction with trajectory generation libraries such as *[ruckig](https://github.com/pantor/ruckig)*
 
+**nested-shaper** is implemented in C++14, is header-only, and does not require the C++ standard library, making it suitable for minimal size embedded systems.
+
+<p align="center">
+  <img src="image/euclidean_reference_trajectory.png" alt="reference trajectory" style="width: 45%;"/>
+  <img src="image/euclidean_shaped_trajectory.png" alt="shaped trajectory" style="width: 45%;"/>
+</p>
+
 -------------------------------
 
 ## When Should I Use It?
@@ -31,7 +38,16 @@ Here, nested-shaper provides a solution.
 Assume an optimal jerk-limited trajectory is created. 
 During runtime, nested-shaper outputs a shaped trajectory with limited snap, crackle, pop, or higher derivatives.
 
-**nested-shaper** is implemented in C++11, is header-only, and does not require the C++ standard library, making it suitable for minimal size embedded systems.
+<p align="center">
+  <img src="image/euclidean_array_position.png" alt="position" style="width: 30%;"/>
+  <img src="image/euclidean_array_velocity.png" alt="velocity" style="width: 30%;"/>
+  <img src="image/euclidean_array_acceleration.png" alt="acceleration" style="width: 30%;"/>
+</p>
+
+<p align="center">
+  <img src="image/euclidean_array_jerk.png" alt="position" style="width: 30%;"/>
+  <img src="image/euclidean_array_snap.png" alt="velocity" style="width: 30%;"/>
+</p>
 
 ## How It Works
 The Theory section explains the background of **SMA** and its role in creating higher-order trajectories. 

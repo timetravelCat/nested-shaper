@@ -1,110 +1,108 @@
-# nested-shaper
-An **input-shaping** library using **nested** *moving average filter*.
+<p align="center">
+  <img src="docs/image/nested_shaper.png" alt="reference trajectory" style="width: 40%;"/>
+</p>
 
-Main purpose of this library is generating realtime higher-order trajectory from lower-order trajectory.
+# About
+A flexible input shaping library utilizing nested simple moving averages (SMA).
 
-## *Step input example*
-![Nested-Filter](examples/figure_1.png)
-- Step input case - **position = 0 if t < 0**, **position = 1 if t >= 0**, **velocity = acceleration = ... = 0**
-- 1D moving average filter kernel(left top) generates continuous position.
-- 2D moving average filter kernel(middle top, right top) generates continuous velocity.
-- 4D moving average filter kernel(left, middle, right down) generates continuous jerk. (second order acceleration)
+nested-shaper is designed to smooth trajectories by transforming lower-order polynomial trajectories into higher-order polynomial trajectories.
 
-----------
-## *Trajectory input example*
-![Nested-Shaper](examples/figure_2.png)
-- Assume input trajectory is given as 
-    - p(t) = 1.0 + 0.12*t^2 - 0.016*t^3 
-    - v(t) = 0.24*t - 0.048*t^2         
-    - a(t) = 0.24 - 0.096*t             
-    - j(t) = - 0.096                    
-    - assume v, a, j is 0 if t < 0 or t > 5, (p is 2 if t > 5)
-- Apply 3D moving average filter for trajectory input
-    - Results continuous crackle.
+- [Explore the docs](https://timetravelcat.github.io/nested-shaper/) for detailed explanation.
+- C++14 [header-only](https://en.wikipedia.org/wiki/Header-only) library.
+- Standard C++ library is not required.
+- Static memory allocation in order to store samples.
+- Average of euclidean or angle space. (WIP on RotationMatrix)
+- Cumulative and Recursive implementations.
+- Tests with [Catch2](https://github.com/catchorg/Catch2). (*BUILD_TESTING*)
+- Examples using [ruckig](https://github.com/pantor/ruckig) and [Matplot++](https://github.com/alandefreitas/matplotplusplus). (*BUILD_EXAMPLE*)
+- User customizable data types and average metrics. (See Advanced Guide section of [docs](https://timetravelcat.github.io/nested-shaper/))
 
-## Features
-- **Header only** library
-- Requires C++ compiler only, supports C++11 standard. (libstdc++/libc++ is not necessary)
-- No dynamic allocation. All required queue memory for moving average filter will be resided in stack area.
+<p align="center">
+  <img src="docs/image/euclidean_reference_trajectory.png" alt="reference trajectory" style="width: 45%;"/>
+  <img src="docs/image/euclidean_shaped_trajectory.png" alt="shaped trajectory" style="width: 45%;"/>
+</p>
+
+# Installation
+**nested-shaper** has no dependencies except examples and testing(both are disabled by default). nested-shaper follows general steps of cmake configuration and build.
+
+## Option 1. System installation & cmake 
+```bash
+mkdir -p build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release # -DBUILD_TESTING=ON -DBUILD_EXAMPLE=ON
+make
+# (sudo) make install # if you want system-wide installation
+```
+
+```CMake
+find_package(nested-shaper REQUIRED)
+add_executable(myapp main.cpp)
+target_link_libraries(myapp PRIVATE nested-shaper::nested-shaper)
+```
+
+## Option 2. CMake FetchContents
+```CMake
+include(FetchContent)
+FetchContent_Declare(nested-shaper GIT_REPOSITORY
+https://github.com/timetravelCat/nested-shaper)
+FetchContent_MakeAvailable(nested-shaper)
+...
+target_link_libraries(myapp PRIVATE nested-shaper)
+```
+
+## Option 3. Copy & Paste
+Copy include/nested-shaper folder to your project. The only thing you need is C++14 compiler.
+
+# Tutorials
+```cpp
+#include <nested-shaper/NestedShaper.hpp>
+
+using namespace ns;
+
+...
+/**
+ * First template argument "double" is your data type. If you need array type, you need to use NestedShaperEuclideanRecursiveArray with extra template arguments.
+ * 
+ * Second argument "5" means nested_shaper outputs position, velocity, acceleration, jerk, snap.
+ * If you use "1", only outputs position.
+ * Currently "1", "3", "5", "7", "9" is supported.
+ * 
+ * Left template arguments defines maximum filter sizes.
+ * In this example, there are total 3 nested filters.
+ * 
+ * Constructor requires at least one arguments. 
+ * If one argument provided, the nested shaper is initialized with the given argument as initial position.
+ * Or Constructor can provided with 1 + (total filter numbers). You can resize filter size(less than template parameter) dynamically.
+ * 
+ * Same behavior with constructor during runtime, by initialize() method is supported.
+ **/
+NestedShaperEuclideanRecursive<double, 5, FIRST_FILTER_SIZE, SECOND_FILTER_SIZE, THIRD_FILTER_SIZE> nested_shaper{3.0f};
+
+/**
+ * convolute accepts reference trajectory position and dt as arguments.
+ * dt must be constant.
+ * 
+ * shaped_trajectory_point stores position, velocity, acceleration, jerk, snap.
+ **/
+array<double, 5> shaped_trajectory_point = nested_shaper.convolute(5.0, 0.01);
+```
+
+## Code examples
+- **1D** euclidean : [euclidean_step.cpp](examples/euclidean_step.cpp)
+- **1D** euclidean, jerk limited trajectory as input : [euclidean_trajectory.cpp](examples/euclidean_trajectory.cpp)
+- **3D** euclidean, jerk limited trajectory as input : [euclidean_array.cpp](examples/euclidean_array.cpp)
+- Common alias classes : [NestedShaper.hpp](include/nested-shaper/NestedShaper.hpp)
 
 ## Limitations
-- (Input) Trajectory must start with zero velocity, zero acceleration, zero jerk...
-- Update dt should be constant.
+- Trajectory must be initialized with a arbitrary position and zero of its derivatives.
 
-## Getting Started
-Nested shaper provides 2 primary classes 
-- **nested_filter** *<typename **T**, size_t **Depth**, bool **Recursive**, SummatorType **summatorType**, size_t... **Capacities**>*
+- **nested-shaper** can not initialized with a moving start trajectory point.
 
-    ```cpp
-    #include <nested-shaper/nested_shaper.hpp>
-    using namespace ns;
-    ...
+- Delta time must be same, when shaping trajectory by convolute method.
 
-    // Declare nested_filter with 3 depth(allows retrieve acceleration), 2-nested moving average filter, max sized with 100 and 200 each.
-    nested_filter<double, 3, true, SummatorType::KBN, 100, 200> _input_shaper;
-    _input_shaper.resize(50, 100); // Supports resize of moving average filters, sized with 50, 100 each. This resets the filter.
-    _input_shaper.fill(1.0); // Fill all internal moving average filter data as 1.0, meaning initial position as 1.0, with zero velocity, acceleration, jerk ...
-    _input_shaper.update(2.0); // Push input position with 2.0
-    const double* output = _input_shaper.peek(0.01); // Update delta time is 10ms. Output is shaped [position, velocity, acceleration] array.
-    ```
-
-- **nested_shaper** *<size_t **Channel**, typename **T**, size_t **Depth**, bool **Recursive**, SummatorType **summatorType**, size_t... **Capacities**>*
-    ```cpp
-    #include <nested-shaper/nested_shaper.hpp>
-    using namespace ns;
-    ...
-
-    // Declare nested_shaper with 3 channel(requires pos, vel, acc input), 4 depth (allows retrieve [Channel + Depth -1] dimension output, pos, vel, acc, jerk, snap, crackle), max sized with 3-order nested moving average filter with 100, 50, 50 each.
-    nested_shaper<3, double, 4, true, SummatorType::KBN, 100, 50, 50> _input_shaper{50, 25, 25}; // Constructor calls resize of nested filters.
-    // 3 channel requires pos, vel, acc input, except special cases, vel, acc **should be zero**
-    const double initial_condition[] = {1.0, 0.0, 0.0};
-    _input_shaper.fill(initial_condition);
-    const double input_trajectory[] = {1.0005, 0.1, 10};
-    _input_shaper.update(input_trajectory);
-    const double* output = _input_shaper.peek(0.01); // Update delta time is 10ms. Output is shaped [position, velocity, acceleration, jerk, snap, crackle] array.
-    ```
-If **Recursive** is true, moving average filter calculated with recursion. If new data arrives, **(new data - old data)/size is added to internal summator**. Otherwise, if new data arrives, average is calculated by **iterating all internal data queue**. If recursive is enabled, filter is vulnerable to numerical error, when large scale filter required or long time operation required. In order to avoid numerical error, **SummatorType** is provided.
-
-**SummatorType** is consists of 3 type (Naive, KahanBabushkaNeumaierSum(KBN), KahanBabushkaKleinSum(KBK)), refer from https://en.wikipedia.org/wiki/Kahan_summation_algorithm. 
-
-If you are working on constrained workspace, and has limited computational resources, I recommend enables recursion and uses KBN summator. Abbreviation classes are provided, nested_filterf, nested_filterd, nested_shaperf, nested_shaperd.
-
-Algorithm speed will be
-
-[**Recursive**, **Naive**] > [**Recursive**, **KBN**] > [**Recursive**, **KBK**] >>> [**Non-Recursive**, **Naive**] > [**Non-Recursive**, **KBN**] > [**Non-Recursive**, **KBK**]
-
-Other useful classes are provided. (used for implementing nested_shaper)
-- Simple 1D moving average filter. Refer **average_filter.hpp**
-- RingBuffer based queue. Refer **sized_queue.hpp**
-
-### Prerequisites
-* **C++ Compiler** - needs to support at least the **C++11** standard, i.e. *MSVC*, *GCC*, *Clang*
-* **CMake v3.15+** if you want to install system-wide library.
-> ***Note:*** *You also need to be able to provide ***CMake*** a supported
-[generator](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html).*
-
-### Installation from sources
-- *nested-shaper* is header-only library.
-    - Copy include/** to your project.
-- If you want to install system-wide, requires **CMake v3.15+**
-    ```bash
-    cmake -Bbuild -DCMAKE_INSTALL_PREFIX=$(INSTALL_LOCATION)
-    cmake --build build --config Release
-    cmake --build build --target install --config Release
-    ```
-    
-### Unit Test
-- *nested-shaper* uses [Catch2](https://github.com/catchorg/Catch2) for using testing.
-- Turn on the CMake **BUILD_UNIT_TEST** option
-
-### Examples
-- *nested-shaper* uses [Matplot++](https://github.com/alandefreitas/matplotplusplus) for examples (for algorithm visualization).
-- Turn on the CMake **BUILD_EXAMPLES** option
-- Install gnuplot and add bin folder to your PATH.
-
-## License
-This project is licensed under the [Unlicense](https://unlicense.org/) - see the
+# License
+This project is licensed under the [BSD-3-Clause](https://opensource.org/license/bsd-3-clause) - see the
 [LICENSE](LICENSE) file for details
 
-## Contact
+# Contact
 timetravelCat - timetraveler930@gmail.com
