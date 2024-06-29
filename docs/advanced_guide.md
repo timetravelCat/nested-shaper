@@ -37,7 +37,7 @@ Euclidean 1D implementation [nested-shaper/metrics/euclidean_derivative_metrics.
 ```cpp
 template<size_t DerivativeOrder>
 struct MyDerivativeMetrics {
-    MyReturnType operator() (QueueConstIterator<std::array<double, 3\>> forwardIterator, QueueConstIterator<std::array<double, 3\>> backwardIterator, const Type& dt) {
+    MyReturnType operator() (QueueConstIterator<std::array<double, 3>> forwardIterator, QueueConstIterator<std::array<double, 3>> backwardIterator, const Type& dt) {
         // MyReturnType will be result type of convolute method.
         // By iterators, you can access last queue data of nested moving average filters.
         // You must use forwardIterator with operator++. or forwardIterator + N
@@ -52,11 +52,11 @@ Euclidean 1D implementation [nested-shaper/metrics/euclidean_mean_recursive_metr
 
 ```cpp
 struct MyAverageMetrics {
-    std::array<double, 3\> operator()(const std::array<double, 3\>& mean,
-                const std::array<double, 3\>& popped,
-                const std::array<double, 3\>& pushed,
-                QueueConstIterator<std::array<double, 3\>> forwardIterator,
-                QueueConstIterator<std::array<double, 3\>> backwardIterator){
+    std::array<double, 3> operator()(const std::array<double, 3>& mean,
+                const std::array<double, 3>& popped,
+                const std::array<double, 3>& pushed,
+                QueueConstIterator<std::array<double, 3>> forwardIterator,
+                QueueConstIterator<std::array<double, 3>> backwardIterator){
     // You can average data, by recursively using previous mean, pushed data and popped data.
     // Or you can average data by cumulative using iterator.
     }
@@ -68,5 +68,5 @@ Adapt to ShaperMetrics.
 
 ```cpp
 template<size_t DerivativeOrder, size_t... Extents>
-using MyNestedShaper = ShaperMetrics<std::array<double, 3\>, MyDerivativeMetrics<DerivativeOrder>, DerivativeOrder, MyAverageMetrics, Extents...>;
+using MyNestedShaper = ShaperMetrics<std::array<double, 3>, MyDerivativeMetrics<DerivativeOrder>, DerivativeOrder, MyAverageMetrics, Extents...>;
 ```

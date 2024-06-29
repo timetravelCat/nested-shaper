@@ -111,8 +111,12 @@ $$
 \frac{d^k r(t)}{dt^k} \leq \frac{A}{\prod_{n=1}^{k} T_{n}}
 $$
 
-Here is an example, step input with **10.0**, applied with 5 filters,
+Here is an example, step input with **10.0**, 
+
+applied with 5 filters,
+
 SMA amplitude with **2.0s, 2.0s, 1.0s, 0.5s, 0.50**
+
 ![example](image/euclidean_step.png)
 
 You can see that, (first section, see **t < 2.0s**)
