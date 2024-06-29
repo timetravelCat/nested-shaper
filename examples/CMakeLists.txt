@@ -24,6 +24,7 @@ find_package(Matplot++ REQUIRED)
 
 file(GLOB_RECURSE EXAMPLES *.cpp)
 
+set(examples)
 foreach(example ${EXAMPLES})
   # Create a target for each test file
   get_filename_component(target ${example} NAME_WE)
@@ -34,4 +35,18 @@ foreach(example ${EXAMPLES})
   target_compile_options(
     ${target} PRIVATE -Wno-double-promotion -Wno-unused-variable
                       -Wno-unused-but-set-variable)
+  list(APPEND examples ${target})
 endforeach()
+
+# Add a custom target to run all examples
+add_custom_target(run_examples COMMENT "Running all examples")
+
+foreach(example ${examples})
+  add_custom_command(
+    TARGET run_examples
+    POST_BUILD
+    COMMAND ${example} DEPENDS ${example}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+endforeach()
+
+message(STATUS "${CMAKE_BINARY_DIR}")
