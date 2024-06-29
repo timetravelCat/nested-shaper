@@ -105,11 +105,25 @@ $$
 
 (10) implies the derivative of results, is always smaller than initial amplitude / nested SMA's amplitude. 
 
-If we generalize the results in case of SMAs have different amplitude, 
+If we generalize the results in case of SMAs have different amplitude, and first sections, 
 
 $$
 \frac{d^k r(t)}{dt^k} \leq \frac{A}{\prod_{n=1}^{k} T_{n}}
 $$
+
+Here is an example, step input with **10.0**, applied with 5 filters,
+SMA amplitude with **2.0s, 2.0s, 1.0s, 0.5s, 0.50**
+![example](image/euclidean_step.png)
+
+You can see that, (first section, see **t < 2.0s**)
+
+*Velocity*      <= 10.0 / 2.0 = 5.0
+
+*Acceleration*  <= 10.0 / (2.0\*2.0) = 2.5
+
+*Jerk*          <= 10.0 / (2.0\*2.0\*1.0) = 2.5
+
+*snap*          <= 10.0 / (2.0\*2.0\*1.0\*0.5) = 5.0
 
 ----------------------------------------------
 
@@ -129,21 +143,15 @@ y[n+1] = y[n] + \frac{1}{N}(x[n+1]-x[n-k+1])
 $$
 
 Calculating SMA by cumulative method suffers from numerical error on long time operation. 
-In order to minimize numerical error, i implemented [Kahan summation and Kahan–Babuška algorithm](https://en.wikipedia.org/wiki/Kahan_summation_algorithm). 
+In order to minimize numerical error, i implemented [Kahan summation algorithm](https://en.wikipedia.org/wiki/Kahan_summation_algorithm). 
 
+----------------------------------------------
 
-### averaging angles, quaternions, rotation matrices.
+### averaging angles.
 What if samples are on the different algebra space? For example, we should use [circular mean](https://en.wikipedia.org/wiki/Circular_mean) for angle. 
 
 $$
 \bar{\alpha} = \text{atan2}(\frac{1}{n}\sum^n_{j=1} \text{sin} (\alpha_{j}), \sum^n_{j=1} \text{cos} (\alpha_{j}))
 $$
-
-
---- WIP --- 
-
-Cumulative implementations on angles
-
-**nested-shaper** supports cumulative method on quaternions and rotation matrices.
 
 ----------------------------------------------
