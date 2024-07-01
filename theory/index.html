@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+        <title>Theory - nested-shaper</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        
+        
+        
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="../assets/css/darcula-highlight.min.css">
+
+        <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../assets/css/dracula-ui.min.css">
+        <link rel="stylesheet" href="../assets/css/mkdocs.min.css">
+
+        
+            <link  rel="icon" type="image/x-icon" href="../assets/img/favicon.ico">
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+                <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+
+<body class="drac-bg-black-secondary drac-text-grey-ternary drac-text drac-scrollbar-purple">
+
+    <main class="d-flex">
+
+        <!-- block sidebar -->
+            <nav id="sidebar" class="sidebar drac-bg-black">
+    <div class="custom-menu">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fa fa-bars"></i>
+            <span class="sr-only">Menu</span>
+        </button>
+    </div>
+
+    <div class="p-4">
+        
+            <img class="logo" src="../image/nested_shaper.png" height="150px">
+        
+
+        <div class="drac-text-center">
+            
+                <span class="drac-text drac-line-height drac-text-white">nested-shaper</span>
+            
+        </div>
+
+        <div class="drac-box flex-column">
+            <ul class="dot-ul">
+                <li><div class="dot-li drac-bg-cyan"></div></li>
+                <li><div class="dot-li drac-bg-green"></div></li>
+                <li><div class="dot-li drac-bg-orange"></div></li>
+                <li><div class="dot-li drac-bg-pink"></div></li>
+                <li><div class="dot-li drac-bg-purple"></div></li>
+                <li><div class="dot-li drac-bg-red"></div></li>
+                <li><div class="dot-li drac-bg-yellow"></div></li>
+            </ul>
+        </div>
+
+        <hr class="drac-divider" />
+
+        <!-- block menu -->
+        <ul class="mb-5 drac-list drac-list-none">
+            
+            <li class="drac-box">
+                <a href=".."
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Home
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="./"
+                    class=" active 
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Theory
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="../advanced_guide/"
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Advanced Guide
+                </a>
+            </li>
+        </ul>
+        <!-- endblock -->
+    </div>
+</nav>
+        <!-- endblock -->
+
+        <nav class="divider drac-bg-purple-cyan"></nav>
+
+        <div class="content">
+            <!-- block header -->
+                <header>
+    <nav class="navbar navbar-expand-xl drac-bg-purple">
+        <div class="container-fluid">
+            
+            <button class="navbar-toggler w-100 text-center" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsMenu"
+                aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse flex-column ml-auto" id="navbarsMenu">
+                <ul class="navbar-nav text-md-center">
+
+                    <!-- block preview -->
+                    <li class="nav-item">
+                            
+        <div class="container">
+            <div class="row row-preview">
+                <div class="col">
+                    <a href=".."
+                        class="btn-preview drac-btn drac-btn-outline drac-text-white drac-text-cyan-green--hover">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="../advanced_guide/"
+                        class="btn-preview drac-btn drac-btn-outline drac-text-white drac-text-cyan-green--hover" style="padding-left: 3%;">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+                    </li>
+                    <!--  endblock -->
+
+                    <!-- block search -->
+                    <li class="nav-item"><div role="search" class="search-box">
+	<form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+		<input type="text" name="q" class="drac-input drac-input-search drac-input-white drac-text-white drac-bg-black-secondary"
+		placeholder="Search docs" title="Type search term here" />
+	</form>
+</div>
+                    </li>
+                    <!--  endblock -->
+
+                    <!-- block source -->
+                    <li class="nav-item">
+                        
+                    </li>
+                    <!--  endblock -->
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+</header>
+            <!-- endblock -->
+
+            <!-- block content -->
+                <section class="p-md-5 section-content">
+    <article>
+        <p><h1 id="theory-inside-nested-shaper">Theory inside nested-shaper<a class="headerlink" href="#theory-inside-nested-shaper" title="Permanent link">&para;</a></h1>
+<h3 id="definitions-of-convolution">Definitions of <a href="https://brianmcfee.net/dstbook-site/content/ch10-convtheorem/ConvolutionTheorem.html">Convolution</a><a class="headerlink" href="#definitions-of-convolution" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[
+h(t) = \int_{-\infty}^{\infty}f(x)g(t-x)dx=f(t)*g(t) \tag{continuous domain}
+\]</div>
+<div class="arithmatex">\[
+h[n] = (f*g)[n]=\sum_{i=0}^{K-1}f[k] \cdot g[n-k] \tag{discrete domain}
+\]</div>
+<hr />
+<h3 id="the-convolution-theorem">The Convolution Theorem<a class="headerlink" href="#the-convolution-theorem" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[
+h = f * g \iff H[m] = F[m] \cdot G[m] \iff H(s)= F(s)G(s)
+\]</div>
+<hr />
+<h3 id="step-and-sma-function-in-frequency-domain">Step and SMA function in frequency domain<a class="headerlink" href="#step-and-sma-function-in-frequency-domain" title="Permanent link">&para;</a></h3>
+<p>Step function, defined by</p>
+<div class="arithmatex">\[
+u(t)=\begin{cases}
+0 &amp; \text{if } t &lt; 0 \\
+A &amp; \text{if } t \geq 0 \\
+\end{cases} \to U(s)=\mathcal{L}\{u(t)\}=\frac{A}{s} \tag{1}
+\]</div>
+<p>SMA function, defined by</p>
+<div class="arithmatex">\[
+\text{SMA}_k(t)=\frac{1}{T_k}(H(t)-H(t-T_k)) \to \text{SMA}_k(s) = \mathcal{L}\{SMA_k(t)\} = \frac{1}{T_k}(\frac{1-e^{T_ks}}{s}) \tag{2}
+\]</div>
+<p>Heaviside unit step, defined by</p>
+<div class="arithmatex">\[
+H(t)=\begin{cases}
+1 &amp; \text{if } t \geq 0 \\
+0 &amp; \text{if } t &lt; 0 \\
+\end{cases}
+\]</div>
+<hr />
+<h3 id="laplace-transforms-used-in-this-theory"><a href="https://www.vyssotski.ch/BasicsOfInstrumentation/LaplaceTransform.pdf">Laplace transforms</a> used in this theory<a class="headerlink" href="#laplace-transforms-used-in-this-theory" title="Permanent link">&para;</a></h3>
+<div class="arithmatex">\[
+\mathcal{L}\{t^{n}\}=\frac{n!}{s^{n+1}} \tag{3}
+\]</div>
+<div class="arithmatex">\[
+\mathcal{L}\{H(t-a)\}=\frac{e^{-as}}{s}\ (a \geq 0) \tag{4}
+\]</div>
+<div class="arithmatex">\[
+\mathcal{L}\{f(t-a)H(t-a)\}=e^{-as}\mathcal{L}\{f(t)\} \tag{5}
+\]</div>
+<hr />
+<h2 id="step-function-with-nested-sma">Step function with nested SMA.<a class="headerlink" href="#step-function-with-nested-sma" title="Permanent link">&para;</a></h2>
+<p>Based on the convolution theorem, we apply nested SMAs(total n) on step function. 
+$$
+R(s)=U(s)\text{SMA}_1(s)\text{SMA}_2(s)\cdots\text{SMA}_n(s)
+$$</p>
+<div class="arithmatex">\[
+=\frac{A}{s^{n+1}}\frac{1}{T_1T_2\cdots T_n}(1-e^{T_1s})(1-e^{T_2s})\cdots (1-e^{T_ns})=\frac{A}{n!}\frac{n!}{s^{n+1}}\frac{1}{\prod^{n}_{k=1}T_{k}}\prod^{n}_{k=1}(1-e^{T_ks})
+\]</div>
+<div class="arithmatex">\[
+=\frac{A}{n!}\frac{n!}{s^{n+1}}\frac{1}{\prod^{n}_{k=1}T_{k}}\sum^{n}_{k=0}(-1)^k\sum_{\stackrel{I\subseteq\{1,2,\cdots,n\}}{|I|=k}}e^{-s\sum_{i\in I}T_i} \tag{6}
+\]</div>
+<p>If SMAs have same amplitude, </p>
+<div class="arithmatex">\[
+R(s)=U(s)\text{SMA}^n(s)=\frac{A}{n!}\frac{n!}{s^{n+1}}\frac{1}{T^n}\sum^n_{k=0}(-1)^k\binom{n}{k}e^{-kTs} \tag{7}
+\]</div>
+<p>Apply inverse laplace transform on (7), in case of all SMAs have same amplitude, for simplicity.</p>
+<div class="arithmatex">\[
+r(t)=\mathcal{L^{-1}}\{R(s)\}=\frac{A}{n!}\frac{1}{T^n}\sum^n_{k=0}(-1)^k\binom{n}{k}(t-kT)^nH(t-kT) \tag{8}
+\]</div>
+<p>Let's investigate first Heaviside section.</p>
+<div class="arithmatex">\[
+r(t)=\frac{A}{n!}\frac{1}{T^n}t^n\ (t \leq T) \tag{9}
+\]</div>
+<p>And we can prove important characteristics about derivatives.</p>
+<div class="arithmatex">\[
+\therefore \frac{d^k r(t)}{dt^k} = \frac{A}{(n-k)!T^n}t^{n-k}\ (\leq \frac{A}{T^k}) \tag{10}
+\]</div>
+<p>(10) implies the derivative of results, is always smaller than initial amplitude / nested SMA's amplitude. </p>
+<p>If we generalize the results in case of SMAs have different amplitude, and first sections, </p>
+<div class="arithmatex">\[
+\frac{d^k r(t)}{dt^k} \leq \frac{A}{\prod_{n=1}^{k} T_{n}}
+\]</div>
+<p>Here is an example, step input with <strong>10.0</strong>, </p>
+<p>applied with 5 filters,</p>
+<p>SMA amplitude with <strong>2.0s, 2.0s, 1.0s, 0.5s, 0.50</strong></p>
+<p><img alt="example" src="../image/euclidean_step.png" /></p>
+<p>You can see that, (first section, see <strong>t &lt; 2.0s</strong>)</p>
+<p><em>Velocity</em>      &lt;= 10.0 / 2.0 = 5.0</p>
+<p><em>Acceleration</em>  &lt;= 10.0 / (2.0*2.0) = 2.5</p>
+<p><em>Jerk</em>          &lt;= 10.0 / (2.0*2.0*1.0) = 2.5</p>
+<p><em>snap</em>          &lt;= 10.0 / (2.0*2.0*1.0*0.5) = 5.0</p>
+<hr />
+<h3 id="implementation-details-about-sma">Implementation details about SMA<a class="headerlink" href="#implementation-details-about-sma" title="Permanent link">&para;</a></h3>
+<p>The mean over last N data-points calculated as </p>
+<div class="arithmatex">\[
+y[n] = \frac{1}{N}\sum_{i=0}^{N-1}x[n-i] \tag{11}
+\]</div>
+<p>Iterating all over the N data points is computationally expensive. 
+However, averaging all data at each time will provide a numerically stable results in long time calculation.
+Other way to calculate SMA is (called as recursive/cumulative),</p>
+<div class="arithmatex">\[ 
+y[n+1] = y[n] + \frac{1}{N}(x[n+1]-x[n-k+1])
+\]</div>
+<p>Calculating SMA by cumulative method suffers from numerical error on long time operation. 
+In order to minimize numerical error, i implemented <a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan summation algorithm</a>. </p>
+<hr />
+<h3 id="averaging-angles">averaging angles.<a class="headerlink" href="#averaging-angles" title="Permanent link">&para;</a></h3>
+<p>What if samples are on the different algebra space? For example, we should use <a href="https://en.wikipedia.org/wiki/Circular_mean">circular mean</a> for angle. </p>
+<div class="arithmatex">\[
+\bar{\alpha} = \text{atan2}(\frac{1}{n}\sum^n_{j=1} \text{sin} (\alpha_{j}), \sum^n_{j=1} \text{cos} (\alpha_{j}))
+\]</div>
+<hr /></p>
+    </article>
+</section>
+            <!-- endblock -->
+
+            <!-- block footer -->
+                <footer>
+    <div class="d-flex flex-sm-row justify-content-between py-2 border-top drac-text-black drac-bg-cyan-green">
+        <a href="https://github.com/dracula/mkdocs" target="_blank" style="padding-left: 1%;"
+            class="footer-text drac-anchor drac-text-black drac-text-purple--hover">
+            Made with Dracula Theme for MkDocs
+        </a>
+    </div>
+</footer>
+            <!-- endblock -->
+        </div>
+
+    </main>
+
+        <script>var base_url = '..';</script>
+        <script src="../assets/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="../assets/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/js/mkdocs.js"></script>
+			<script src="../javascripts/mathjax.js" defer></script>
+			<script src="https://polyfill.io/v3/polyfill.min.js?features=es6" defer></script>
+			<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+			<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+			<script src="../search/main.js" defer></script>
+
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+        <title>nested-shaper</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="description" content="None">
+        
+        
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="assets/css/darcula-highlight.min.css">
+
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/css/dracula-ui.min.css">
+        <link rel="stylesheet" href="assets/css/mkdocs.min.css">
+
+        
+            <link  rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+                <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+
+<body class="drac-bg-black-secondary drac-text-grey-ternary drac-text drac-scrollbar-purple">
+
+    <main class="d-flex">
+
+        <!-- block sidebar -->
+            <nav id="sidebar" class="sidebar drac-bg-black">
+    <div class="custom-menu">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fa fa-bars"></i>
+            <span class="sr-only">Menu</span>
+        </button>
+    </div>
+
+    <div class="p-4">
+        
+            <img class="logo" src="image/nested_shaper.png" height="150px">
+        
+
+        <div class="drac-text-center">
+            
+                <span class="drac-text drac-line-height drac-text-white">nested-shaper</span>
+            
+        </div>
+
+        <div class="drac-box flex-column">
+            <ul class="dot-ul">
+                <li><div class="dot-li drac-bg-cyan"></div></li>
+                <li><div class="dot-li drac-bg-green"></div></li>
+                <li><div class="dot-li drac-bg-orange"></div></li>
+                <li><div class="dot-li drac-bg-pink"></div></li>
+                <li><div class="dot-li drac-bg-purple"></div></li>
+                <li><div class="dot-li drac-bg-red"></div></li>
+                <li><div class="dot-li drac-bg-yellow"></div></li>
+            </ul>
+        </div>
+
+        <hr class="drac-divider" />
+
+        <!-- block menu -->
+        <ul class="mb-5 drac-list drac-list-none">
+            
+            <li class="drac-box">
+                <a href="."
+                    class=" active 
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Home
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="theory/"
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Theory
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="advanced_guide/"
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Advanced Guide
+                </a>
+            </li>
+        </ul>
+        <!-- endblock -->
+    </div>
+</nav>
+        <!-- endblock -->
+
+        <nav class="divider drac-bg-purple-cyan"></nav>
+
+        <div class="content">
+            <!-- block header -->
+                <header>
+    <nav class="navbar navbar-expand-xl drac-bg-purple">
+        <div class="container-fluid">
+            
+            <button class="navbar-toggler w-100 text-center" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsMenu"
+                aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse flex-column ml-auto" id="navbarsMenu">
+                <ul class="navbar-nav text-md-center">
+
+                    <!-- block preview -->
+                    <li class="nav-item">
+                            
+        <div class="container">
+            <div class="row row-preview">
+                <div class="col">
+                    <a 
+                        class="btn-preview drac-btn drac-text-white--hover disabled">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="theory/"
+                        class="btn-preview drac-btn drac-btn-outline drac-text-white drac-text-cyan-green--hover" style="padding-left: 3%;">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+                    </li>
+                    <!--  endblock -->
+
+                    <!-- block search -->
+                    <li class="nav-item"><div role="search" class="search-box">
+	<form id="rtd-search-form" class="wy-form" action="./search.html" method="get">
+		<input type="text" name="q" class="drac-input drac-input-search drac-input-white drac-text-white drac-bg-black-secondary"
+		placeholder="Search docs" title="Type search term here" />
+	</form>
+</div>
+                    </li>
+                    <!--  endblock -->
+
+                    <!-- block source -->
+                    <li class="nav-item">
+                        
+                    </li>
+                    <!--  endblock -->
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+</header>
+            <!-- endblock -->
+
+            <!-- block content -->
+                <section class="p-md-5 section-content">
+    <article>
+        <p><h1 id="nested-shaper"><strong>nested-shaper</strong><a class="headerlink" href="#nested-shaper" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
+<p>The programmatic usage guide is available in the <a href="https://github.com/timetravelCat/nested-shaper">repository</a>.</p>
+<p><strong>nested-shaper</strong> is a flexible input shaping library utilizing nested simple moving averages (SMA).</p>
+<p><strong>nested-shaper</strong> is designed to smooth trajectories by transforming lower-order polynomial trajectories into higher-order polynomial trajectories. 
+By configuring the amplitude of the <strong>SMA</strong>, users can limit the maximum value of the derivatives of the trajectory.</p>
+<p>While SMAs are commonly used for noise reduction in signal processing, <strong>nested-shaper</strong> is not intended for this purpose. 
+Instead, <strong>nested-shaper</strong> processes trajectory samples at specific intervals, outputting a point on a higher-order trajectory along with the derivative values of the trajectory.</p>
+<p><strong>nested-shaper</strong> does not generate trajectories under physical constraints. 
+It smooths pre-defined trajectories and can be used in conjunction with trajectory generation libraries such as <em><a href="https://github.com/pantor/ruckig">ruckig</a></em></p>
+<p><strong>nested-shaper</strong> is implemented in C++14, is header-only, and does not require the C++ standard library, making it suitable for minimal size embedded systems.</p>
+<p align="center">
+  <img src="image/euclidean_reference_trajectory.png" alt="reference trajectory" style="width: 45%;"/>
+  <img src="image/euclidean_shaped_trajectory.png" alt="shaped trajectory" style="width: 45%;"/>
+</p>
+
+<hr />
+<h2 id="when-should-i-use-it">When Should I Use It?<a class="headerlink" href="#when-should-i-use-it" title="Permanent link">&para;</a></h2>
+<p>In most cases, <strong>jerk</strong> (the fourth derivative of position) suffices for precise model-based control of systems. 
+However, some systems may require:</p>
+<ul>
+<li><strong>Snap</strong> (the fifth derivative of position)</li>
+<li><strong>Crackle</strong> (the sixth derivative of position)</li>
+<li><strong>Pop</strong> (the seventh derivative of position) or higher-order derivatives.</li>
+</ul>
+<p>Generating a trajectory with crackle continuity is computationally expensive.</p>
+<p>Here, nested-shaper provides a solution. 
+Assume an optimal jerk-limited trajectory is created. 
+During runtime, nested-shaper outputs a shaped trajectory with limited snap, crackle, pop, or higher derivatives.</p>
+<p align="center">
+  <img src="image/euclidean_array_position.png" alt="position" style="width: 30%;"/>
+  <img src="image/euclidean_array_velocity.png" alt="velocity" style="width: 30%;"/>
+  <img src="image/euclidean_array_acceleration.png" alt="acceleration" style="width: 30%;"/>
+</p>
+
+<p align="center">
+  <img src="image/euclidean_array_jerk.png" alt="position" style="width: 30%;"/>
+  <img src="image/euclidean_array_snap.png" alt="velocity" style="width: 30%;"/>
+</p>
+
+<h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<p>The Theory section explains the background of <strong>SMA</strong> and its role in creating higher-order trajectories. 
+It briefly covers concepts such as convolution, Laplace transforms, and inverse transforms.</p>
+<h2 id="advanced-guide">Advanced Guide<a class="headerlink" href="#advanced-guide" title="Permanent link">&para;</a></h2>
+<p>While <strong>nested-shaper</strong> operates by averaging datasets, averaging is not always straightforward. 
+For instance, averaging 3D rotations (and even 1D rotations) is more complex than averaging 1D scalar variables. 
+The Advanced Guide explains how to customize averaging metrics based on different datasets.</p>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
+<p>nested-shaper is free to use and modify under the terms of the permissive <a href="https://github.com/timetravelCat/nested-shaper?tab=BSD-3-Clause-1-ov-file#readme">BSD 3-clause</a> license</p></p>
+    </article>
+</section>
+            <!-- endblock -->
+
+            <!-- block footer -->
+                <footer>
+    <div class="d-flex flex-sm-row justify-content-between py-2 border-top drac-text-black drac-bg-cyan-green">
+        <a href="https://github.com/dracula/mkdocs" target="_blank" style="padding-left: 1%;"
+            class="footer-text drac-anchor drac-text-black drac-text-purple--hover">
+            Made with Dracula Theme for MkDocs
+        </a>
+    </div>
+</footer>
+            <!-- endblock -->
+        </div>
+
+    </main>
+
+        <script>var base_url = '.';</script>
+        <script src="assets/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/mkdocs.js"></script>
+			<script src="javascripts/mathjax.js" defer></script>
+			<script src="https://polyfill.io/v3/polyfill.min.js?features=es6" defer></script>
+			<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+			<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+			<script src="search/main.js" defer></script>
+
+</body>
+
+</html>
