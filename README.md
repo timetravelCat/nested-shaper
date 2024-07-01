@@ -65,7 +65,7 @@ using namespace ns;
  * 
  * Second argument "5" means nested_shaper outputs position, velocity, acceleration, jerk, snap.
  * If you use "1", only outputs position.
- * Currently "1", "3", "5", "7", "9" is supported.
+ * Recommends to use "1", "3", "5", "7", "9", for better accuracy of derivatives.
  * 
  * Left template arguments defines maximum filter sizes.
  * In this example, there are total 3 nested filters.
@@ -98,7 +98,9 @@ array<double, 5> shaped_trajectory_point = nested_shaper.convolute(5.0, 0.01);
 
 - **nested-shaper** can not initialized with a moving start trajectory point.
 
-- Delta time must be same, when shaping trajectory by convolute method.
+- Delta time must be same, during entire shaping process
+
+- Maximum supported derivate order : 9 (See [central_finite_difference_coefficients.hpp](include/nested-shaper/metrics/central_finite_difference_coefficients.hpp))
 
 # License
 This project is licensed under the [BSD-3-Clause](https://opensource.org/license/bsd-3-clause) - see the
